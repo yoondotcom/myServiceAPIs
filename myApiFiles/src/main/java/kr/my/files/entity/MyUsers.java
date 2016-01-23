@@ -19,9 +19,6 @@ public class MyUsers {
     private Timestamp userRegDate;
     private Timestamp userUptDate;
     private Collection<MyFiles> myFilesByUserCode;
-    private Collection<MyLikePosts> myLikePostsesByUserCode;
-    private Collection<MyPosts> myPostsesByUserCode;
-    private Collection<PostTags> postTagsesByUserCode;
     private Collection<UserFilePermissions> userFilePermissionsesByUserCode;
 
     @Id
@@ -145,33 +142,6 @@ public class MyUsers {
 
     public void setMyFilesByUserCode(Collection<MyFiles> myFilesByUserCode) {
         this.myFilesByUserCode = myFilesByUserCode;
-    }
-
-    @OneToMany(mappedBy = "myUsersByMyUsersUserCode")
-    public Collection<MyLikePosts> getMyLikePostsesByUserCode() {
-        return myLikePostsesByUserCode;
-    }
-
-    public void setMyLikePostsesByUserCode(Collection<MyLikePosts> myLikePostsesByUserCode) {
-        this.myLikePostsesByUserCode = myLikePostsesByUserCode;
-    }
-
-    @OneToMany(mappedBy = "myUsersByMyUsersMemCode")
-    public Collection<MyPosts> getMyPostsesByUserCode() {
-        return myPostsesByUserCode;
-    }
-
-    public void setMyPostsesByUserCode(Collection<MyPosts> myPostsesByUserCode) {
-        this.myPostsesByUserCode = myPostsesByUserCode;
-    }
-
-    @OneToMany(mappedBy = "myUsersByMyUsersUserCode")
-    public Collection<PostTags> getPostTagsesByUserCode() {
-        return postTagsesByUserCode;
-    }
-
-    public void setPostTagsesByUserCode(Collection<PostTags> postTagsesByUserCode) {
-        this.postTagsesByUserCode = postTagsesByUserCode;
     }
 
     @OneToMany(mappedBy = "myUsersByMyUsersUserCode")

@@ -18,11 +18,9 @@ public class MyUsers {
     private String userActivationKey;
     private Timestamp userRegDate;
     private Timestamp userUptDate;
-    private Collection<MyFiles> myFilesByUserCode;
     private Collection<MyLikePosts> myLikePostsesByUserCode;
     private Collection<MyPosts> myPostsesByUserCode;
     private Collection<PostTags> postTagsesByUserCode;
-    private Collection<UserFilePermissions> userFilePermissionsesByUserCode;
 
     @Id
     @Column(name = "USER_CODE", nullable = false, insertable = true, updatable = true, length = 15)
@@ -138,14 +136,7 @@ public class MyUsers {
         return result;
     }
 
-    @OneToMany(mappedBy = "myUsersByMyUsersUserCode")
-    public Collection<MyFiles> getMyFilesByUserCode() {
-        return myFilesByUserCode;
-    }
 
-    public void setMyFilesByUserCode(Collection<MyFiles> myFilesByUserCode) {
-        this.myFilesByUserCode = myFilesByUserCode;
-    }
 
     @OneToMany(mappedBy = "myUsersByMyUsersUserCode")
     public Collection<MyLikePosts> getMyLikePostsesByUserCode() {
@@ -172,14 +163,5 @@ public class MyUsers {
 
     public void setPostTagsesByUserCode(Collection<PostTags> postTagsesByUserCode) {
         this.postTagsesByUserCode = postTagsesByUserCode;
-    }
-
-    @OneToMany(mappedBy = "myUsersByMyUsersUserCode")
-    public Collection<UserFilePermissions> getUserFilePermissionsesByUserCode() {
-        return userFilePermissionsesByUserCode;
-    }
-
-    public void setUserFilePermissionsesByUserCode(Collection<UserFilePermissions> userFilePermissionsesByUserCode) {
-        this.userFilePermissionsesByUserCode = userFilePermissionsesByUserCode;
     }
 }
