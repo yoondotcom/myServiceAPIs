@@ -1,5 +1,12 @@
 package kr.my.files.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -7,28 +14,45 @@ import java.util.Collection;
 /**
  * Created by goodjwon on 16. 1. 16..
  */
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "shareSeq")
+@Getter
 @Entity
 @Table(name = "MY_FILES", schema = "", catalog = "MY_MEMBER")
 public class MyFiles {
+    @Id
+    @Column(name = "FILE_SEQ", nullable = false, insertable = true, updatable = true)
     private Long fileSeq;
+    @Column(name = "FILE_ORG_NAME", nullable = false, insertable = true, updatable = true, length = 255)
     private String fileOrgName;
+    @Column(name = "FILE_PHY_NAME", nullable = false, insertable = true, updatable = true, length = 100)
     private String filePhyName;
+    @Column(name = "FILE_HASH_CODE", nullable = false, insertable = true, updatable = true, length = 255)
     private String fileHashCode;
+    @Column(name = "FILE_DOWNLOAD_PATH", nullable = false, insertable = true, updatable = true, length = 1000)
     private String fileDownloadPath;
+    @Column(name = "FILE_OWNER_DISPLAY_NAME", nullable = true, insertable = true, updatable = true, length = 100)
     private String fileOwnerDisplayName;
+    @Column(name = "FILE_PATH", nullable = false, insertable = true, updatable = true, length = 1000)
     private String filePath;
+    @Column(name = "FILE_STATUS", nullable = false, insertable = true, updatable = true, length = 3)
     private String fileStatus;
+    @Column(name = "REG_DATE", nullable = false, insertable = true, updatable = true)
     private Timestamp regDate;
+    @Column(name = "POST_LINKED", nullable = false, insertable = true, updatable = true)
     private Long postLinked;
+    @Column(name = "POST_LINK_TYPE", nullable = false, insertable = true, updatable = true, length = 50)
     private String postLinkType;
+    @Column(name = "FILE_CONTENT_TYPE", nullable = true, insertable = true, updatable = true, length = 200)
     private String fileContentType;
     private String myUsersUserCode;
     private Collection<FilePermission> filePermissionsByFileSeq;
     private Collection<FileShares> fileSharesByFileSeq;
     private MyUsers myUsersByMyUsersUserCode;
 
-    @Id
-    @Column(name = "FILE_SEQ", nullable = false, insertable = true, updatable = true)
+
     public Long getFileSeq() {
         return fileSeq;
     }
@@ -38,7 +62,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "FILE_ORG_NAME", nullable = false, insertable = true, updatable = true, length = 255)
+
     public String getFileOrgName() {
         return fileOrgName;
     }
@@ -48,7 +72,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "FILE_PHY_NAME", nullable = false, insertable = true, updatable = true, length = 100)
+
     public String getFilePhyName() {
         return filePhyName;
     }
@@ -58,7 +82,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "FILE_HASH_CODE", nullable = false, insertable = true, updatable = true, length = 255)
+
     public String getFileHashCode() {
         return fileHashCode;
     }
@@ -68,7 +92,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "FILE_DOWNLOAD_PATH", nullable = false, insertable = true, updatable = true, length = 1000)
+
     public String getFileDownloadPath() {
         return fileDownloadPath;
     }
@@ -78,7 +102,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "FILE_OWNER_DISPLAY_NAME", nullable = true, insertable = true, updatable = true, length = 100)
+
     public String getFileOwnerDisplayName() {
         return fileOwnerDisplayName;
     }
@@ -88,7 +112,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "FILE_PATH", nullable = false, insertable = true, updatable = true, length = 1000)
+
     public String getFilePath() {
         return filePath;
     }
@@ -98,7 +122,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "FILE_STATUS", nullable = false, insertable = true, updatable = true, length = 3)
+
     public String getFileStatus() {
         return fileStatus;
     }
@@ -108,7 +132,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "REG_DATE", nullable = false, insertable = true, updatable = true)
+
     public Timestamp getRegDate() {
         return regDate;
     }
@@ -118,7 +142,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "POST_LINKED", nullable = false, insertable = true, updatable = true)
+
     public Long getPostLinked() {
         return postLinked;
     }
@@ -128,7 +152,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "POST_LINK_TYPE", nullable = false, insertable = true, updatable = true, length = 50)
+
     public String getPostLinkType() {
         return postLinkType;
     }
@@ -138,7 +162,7 @@ public class MyFiles {
     }
 
     @Basic
-    @Column(name = "FILE_CONTENT_TYPE", nullable = true, insertable = true, updatable = true, length = 200)
+
     public String getFileContentType() {
         return fileContentType;
     }
@@ -155,54 +179,6 @@ public class MyFiles {
 
     public void setMyUsersUserCode(String myUsersUserCode) {
         this.myUsersUserCode = myUsersUserCode;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MyFiles myFiles = (MyFiles) o;
-
-        if (fileSeq != null ? !fileSeq.equals(myFiles.fileSeq) : myFiles.fileSeq != null) return false;
-        if (fileOrgName != null ? !fileOrgName.equals(myFiles.fileOrgName) : myFiles.fileOrgName != null) return false;
-        if (filePhyName != null ? !filePhyName.equals(myFiles.filePhyName) : myFiles.filePhyName != null) return false;
-        if (fileHashCode != null ? !fileHashCode.equals(myFiles.fileHashCode) : myFiles.fileHashCode != null)
-            return false;
-        if (fileDownloadPath != null ? !fileDownloadPath.equals(myFiles.fileDownloadPath) : myFiles.fileDownloadPath != null)
-            return false;
-        if (fileOwnerDisplayName != null ? !fileOwnerDisplayName.equals(myFiles.fileOwnerDisplayName) : myFiles.fileOwnerDisplayName != null)
-            return false;
-        if (filePath != null ? !filePath.equals(myFiles.filePath) : myFiles.filePath != null) return false;
-        if (fileStatus != null ? !fileStatus.equals(myFiles.fileStatus) : myFiles.fileStatus != null) return false;
-        if (regDate != null ? !regDate.equals(myFiles.regDate) : myFiles.regDate != null) return false;
-        if (postLinked != null ? !postLinked.equals(myFiles.postLinked) : myFiles.postLinked != null) return false;
-        if (postLinkType != null ? !postLinkType.equals(myFiles.postLinkType) : myFiles.postLinkType != null)
-            return false;
-        if (fileContentType != null ? !fileContentType.equals(myFiles.fileContentType) : myFiles.fileContentType != null)
-            return false;
-        if (myUsersUserCode != null ? !myUsersUserCode.equals(myFiles.myUsersUserCode) : myFiles.myUsersUserCode != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = fileSeq != null ? fileSeq.hashCode() : 0;
-        result = 31 * result + (fileOrgName != null ? fileOrgName.hashCode() : 0);
-        result = 31 * result + (filePhyName != null ? filePhyName.hashCode() : 0);
-        result = 31 * result + (fileHashCode != null ? fileHashCode.hashCode() : 0);
-        result = 31 * result + (fileDownloadPath != null ? fileDownloadPath.hashCode() : 0);
-        result = 31 * result + (fileOwnerDisplayName != null ? fileOwnerDisplayName.hashCode() : 0);
-        result = 31 * result + (filePath != null ? filePath.hashCode() : 0);
-        result = 31 * result + (fileStatus != null ? fileStatus.hashCode() : 0);
-        result = 31 * result + (regDate != null ? regDate.hashCode() : 0);
-        result = 31 * result + (postLinked != null ? postLinked.hashCode() : 0);
-        result = 31 * result + (postLinkType != null ? postLinkType.hashCode() : 0);
-        result = 31 * result + (fileContentType != null ? fileContentType.hashCode() : 0);
-        result = 31 * result + (myUsersUserCode != null ? myUsersUserCode.hashCode() : 0);
-        return result;
     }
 
     @OneToMany(mappedBy = "myFilesByMyFilesFileSeq")
