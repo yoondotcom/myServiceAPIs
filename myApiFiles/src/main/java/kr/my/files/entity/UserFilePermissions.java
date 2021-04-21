@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "filesRoleFileRoleSeq")
 @Getter
 @Entity
-@Table(name = "USER_FILE_PERMISSIONS", schema = "", catalog = "MY_MEMBER")
+@Table(name = "USER_FILE_PERMISSIONS")
 public class UserFilePermissions {
     @Id
     @Column(name = "FILES_ROLE_FILE_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
@@ -33,23 +33,16 @@ public class UserFilePermissions {
     private String fileGroupPermissionRead;
     @Column(name = "FILE_GROUP_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
     private String fileGroupPermissionWrite;
-    @Column(name = "FILE_ALLUSER_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileAlluserPermissionRead;
-    @Column(name = "FILE_ALLUSER_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileAlluserPermissionWrite;
+    @Column(name = "FILE_ALL_USER_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
+    private String fileAllUserPermissionRead;
+    @Column(name = "FILE_ALL_USER_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
+    private String fileAllUserPermissionWrite;
     @Column(name = "REG_DATE", nullable = true, insertable = true, updatable = true)
     private LocalDateTime regDate;
-    @Column(name = "MY_USERS_USER_CODE", nullable = false, insertable = true, updatable = true, length = 15)
-    private LocalDateTime uptDate;
     @Column(name = "UPT_DATE", nullable = true, insertable = true, updatable = true)
-    private String myUsersUserCode;
-    private MyUsers myUsersByMyUsersUserCode;
+    private LocalDateTime uptDate;
 
     @ManyToOne
     @JoinColumn(name = "MY_USERS_USER_CODE", referencedColumnName = "USER_CODE", nullable = false)
-    public MyUsers getMyUsersByMyUsersUserCode() {
-        return myUsersByMyUsersUserCode;
-    }
-
-
+    private MyUsers myUsersByMyUsersUserCode;
 }

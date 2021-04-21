@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "filesRoleFileRoleSeq")
 @Getter
 @Entity
-@Table(name = "FILE_PERMISSION", schema = "", catalog = "MY_MEMBER")
+@Table(name = "FILE_PERMISSION")
 public class FilePermission {
 
     @Id @Column(name = "FILES_ROLE_FILE_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
@@ -37,8 +37,7 @@ public class FilePermission {
     private Timestamp regDate;
     @Column(name = "UPT_DATE", nullable = true, insertable = true, updatable = true)
     private Timestamp uptDate;
-    @Column(name = "MY_FILES_FILE_SEQ", nullable = false, insertable = true, updatable = true)
-    private Long myFilesFileSeq;
+
     @ManyToOne
     @JoinColumn(name = "MY_FILES_FILE_SEQ", referencedColumnName = "FILE_SEQ", nullable = false)
     private MyFiles myFilesByMyFilesFileSeq;

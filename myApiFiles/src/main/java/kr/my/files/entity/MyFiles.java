@@ -20,7 +20,7 @@ import java.util.Collection;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "shareSeq")
 @Getter
 @Entity
-@Table(name = "MY_FILES", schema = "", catalog = "MY_MEMBER")
+@Table(name = "MY_FILES")
 public class MyFiles {
     @Id
     @Column(name = "FILE_SEQ", nullable = false, insertable = true, updatable = true)
@@ -47,165 +47,15 @@ public class MyFiles {
     private String postLinkType;
     @Column(name = "FILE_CONTENT_TYPE", nullable = true, insertable = true, updatable = true, length = 200)
     private String fileContentType;
-    private String myUsersUserCode;
+
+    @OneToMany(mappedBy = "myFilesByMyFilesFileSeq")
     private Collection<FilePermission> filePermissionsByFileSeq;
+
+    @OneToMany(mappedBy = "myFilesByMyFilesFileSeq")
     private Collection<FileShares> fileSharesByFileSeq;
-    private MyUsers myUsersByMyUsersUserCode;
-
-
-    public Long getFileSeq() {
-        return fileSeq;
-    }
-
-    public void setFileSeq(Long fileSeq) {
-        this.fileSeq = fileSeq;
-    }
-
-    @Basic
-
-    public String getFileOrgName() {
-        return fileOrgName;
-    }
-
-    public void setFileOrgName(String fileOrgName) {
-        this.fileOrgName = fileOrgName;
-    }
-
-    @Basic
-
-    public String getFilePhyName() {
-        return filePhyName;
-    }
-
-    public void setFilePhyName(String filePhyName) {
-        this.filePhyName = filePhyName;
-    }
-
-    @Basic
-
-    public String getFileHashCode() {
-        return fileHashCode;
-    }
-
-    public void setFileHashCode(String fileHashCode) {
-        this.fileHashCode = fileHashCode;
-    }
-
-    @Basic
-
-    public String getFileDownloadPath() {
-        return fileDownloadPath;
-    }
-
-    public void setFileDownloadPath(String fileDownloadPath) {
-        this.fileDownloadPath = fileDownloadPath;
-    }
-
-    @Basic
-
-    public String getFileOwnerDisplayName() {
-        return fileOwnerDisplayName;
-    }
-
-    public void setFileOwnerDisplayName(String fileOwnerDisplayName) {
-        this.fileOwnerDisplayName = fileOwnerDisplayName;
-    }
-
-    @Basic
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    @Basic
-
-    public String getFileStatus() {
-        return fileStatus;
-    }
-
-    public void setFileStatus(String fileStatus) {
-        this.fileStatus = fileStatus;
-    }
-
-    @Basic
-
-    public Timestamp getRegDate() {
-        return regDate;
-    }
-
-    public void setRegDate(Timestamp regDate) {
-        this.regDate = regDate;
-    }
-
-    @Basic
-
-    public Long getPostLinked() {
-        return postLinked;
-    }
-
-    public void setPostLinked(Long postLinked) {
-        this.postLinked = postLinked;
-    }
-
-    @Basic
-
-    public String getPostLinkType() {
-        return postLinkType;
-    }
-
-    public void setPostLinkType(String postLinkType) {
-        this.postLinkType = postLinkType;
-    }
-
-    @Basic
-
-    public String getFileContentType() {
-        return fileContentType;
-    }
-
-    public void setFileContentType(String fileContentType) {
-        this.fileContentType = fileContentType;
-    }
-
-    @Basic
-    @Column(name = "MY_USERS_USER_CODE", nullable = false, insertable = true, updatable = true, length = 15)
-    public String getMyUsersUserCode() {
-        return myUsersUserCode;
-    }
-
-    public void setMyUsersUserCode(String myUsersUserCode) {
-        this.myUsersUserCode = myUsersUserCode;
-    }
-
-    @OneToMany(mappedBy = "myFilesByMyFilesFileSeq")
-    public Collection<FilePermission> getFilePermissionsByFileSeq() {
-        return filePermissionsByFileSeq;
-    }
-
-    public void setFilePermissionsByFileSeq(Collection<FilePermission> filePermissionsByFileSeq) {
-        this.filePermissionsByFileSeq = filePermissionsByFileSeq;
-    }
-
-    @OneToMany(mappedBy = "myFilesByMyFilesFileSeq")
-    public Collection<FileShares> getFileSharesByFileSeq() {
-        return fileSharesByFileSeq;
-    }
-
-    public void setFileSharesByFileSeq(Collection<FileShares> fileSharesByFileSeq) {
-        this.fileSharesByFileSeq = fileSharesByFileSeq;
-    }
 
     @ManyToOne
     @JoinColumn(name = "MY_USERS_USER_CODE", referencedColumnName = "USER_CODE", nullable = false)
-    public MyUsers getMyUsersByMyUsersUserCode() {
-        return myUsersByMyUsersUserCode;
-    }
+    private MyUsers myUsersByMyUsersUserCode;
 
-    public void setMyUsersByMyUsersUserCode(MyUsers myUsersByMyUsersUserCode) {
-        this.myUsersByMyUsersUserCode = myUsersByMyUsersUserCode;
-    }
 }

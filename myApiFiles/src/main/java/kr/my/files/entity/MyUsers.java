@@ -19,7 +19,7 @@ import java.util.Collection;
 @ToString
 @Getter
 @Entity
-@Table(name = "MY_USERS", schema = "", catalog = "MY_MEMBER")
+@Table(name = "MY_USERS")
 public class MyUsers {
     @Id
     @Column(name = "USER_CODE", nullable = false, insertable = true, updatable = true, length = 15)
