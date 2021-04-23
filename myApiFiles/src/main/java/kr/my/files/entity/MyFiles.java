@@ -48,14 +48,11 @@ public class MyFiles {
     @Column(name = "FILE_CONTENT_TYPE", nullable = true, insertable = true, updatable = true, length = 200)
     private String fileContentType;
 
-    @OneToMany(mappedBy = "myFilesByMyFilesFileSeq")
+    @OneToMany(mappedBy = "fileRoleSeq")
     private Collection<FilePermission> filePermissionsByFileSeq;
 
-    @OneToMany(mappedBy = "myFilesByMyFilesFileSeq")
-    private Collection<FileShares> fileSharesByFileSeq;
-
     @ManyToOne
-    @JoinColumn(name = "MY_USERS_USER_CODE", referencedColumnName = "USER_CODE", nullable = false)
-    private MyUsers myUsersByMyUsersUserCode;
+    @JoinColumn(name = "USER_CODE", referencedColumnName = "USER_CODE", nullable = false)
+    private MyUsers myUsersByUserCode;
 
 }

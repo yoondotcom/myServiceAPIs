@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 /**
  * Created by goodjwon on 16. 1. 16..
+ * 사용자 기본 퍼미션 정책을 저장 한다.
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,27 +23,40 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "USER_FILE_PERMISSIONS")
 public class UserFilePermissions {
-    @Id
-    @Column(name = "FILES_ROLE_FILE_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
-    private Integer filesRoleFileRoleSeq;
-    @Column(name = "FILE_OWNER_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileOwnerPermissionRead;
-    @Column(name = "FILE_OWNER_PERMISSION_WRITE", nullable = true, insertable = true, updatable = true, length = 1)
-    private String fileOwnerPermissionWrite;
-    @Column(name = "FILE_GROUP_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileGroupPermissionRead;
-    @Column(name = "FILE_GROUP_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileGroupPermissionWrite;
-    @Column(name = "FILE_ALL_USER_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileAllUserPermissionRead;
-    @Column(name = "FILE_ALL_USER_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileAllUserPermissionWrite;
-    @Column(name = "REG_DATE", nullable = true, insertable = true, updatable = true)
+
+    @Id @GeneratedValue @Column(name = "USER_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
+    private Long userDefaultPermissionSeq;
+    @Column(name = "OWNER_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer ownerPermissionRead;
+    @Column(name = "OWNER_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer ownerPermissionWrite;
+    @Column(name = "GROUP_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer groupPermissionRead;
+    @Column(name = "GROUP_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer groupPermissionWrite;
+    @Column(name = "PUBLIC_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer publicPermissionRead;
+    @Column(name = "PUBLIC_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer publicPermissionWrite;
+    @Column(name = "REG_DATE", nullable = false, insertable = true, updatable = true)
     private LocalDateTime regDate;
     @Column(name = "UPT_DATE", nullable = true, insertable = true, updatable = true)
     private LocalDateTime uptDate;
 
     @ManyToOne
     @JoinColumn(name = "MY_USERS_USER_CODE", referencedColumnName = "USER_CODE", nullable = false)
-    private MyUsers myUsersByMyUsersUserCode;
+    private MyUsers myUsersByUserCode;
+
+    public UserFilePermissions(Integer ownerPermissionRead, Integer ownerPermissionWrite,
+                               Integer groupPermissionRead, Integer groupPermissionWrite,
+                               Integer publicPermissionRead, Integer publicPermissionWrite,
+                               MyUsers myUsersByUserCode) {
+        this.ownerPermissionRead = ownerPermissionRead;
+        this.ownerPermissionWrite = ownerPermissionWrite;
+        this.groupPermissionRead = groupPermissionRead;
+        this.groupPermissionWrite = groupPermissionWrite;
+        this.publicPermissionRead = publicPermissionRead;
+        this.publicPermissionWrite = publicPermissionWrite;
+        this.myUsersByUserCode = myUsersByUserCode;
+    }
 }

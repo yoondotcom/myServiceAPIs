@@ -6,9 +6,11 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Created by goodjwon on 16. 1. 16..
+ * 파일에 접근 정책을 설정 한다.
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,42 +21,39 @@ import java.sql.Timestamp;
 @Table(name = "FILE_PERMISSION")
 public class FilePermission {
 
-    @Id @Column(name = "FILES_ROLE_FILE_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
-    private Long filesRoleFileRoleSeq;
-    @Column(name = "FILE_OWNER_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileOwnerPermissionRead;
-    @Column(name = "FILE_OWNER_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileOwnerPermissionWrite;
-    @Column(name = "FILE_GROUP_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileGroupPermissionRead;
-    @Column(name = "FILE_GROUP_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileGroupPermissionWrite;
-    @Column(name = "FILE_ALLUSER_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileAlluserPermissionRead;
-    @Column(name = "FILE_ALLUSER_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
-    private String fileAlluserPermissionWrite;
+    @Id @Column(name = "FILE_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
+    private Long fileRoleSeq;
+    @Column(name = "OWNER_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer ownerPermissionRead;
+    @Column(name = "OWNER_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer ownerPermissionWrite;
+    @Column(name = "GROUP_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer groupPermissionRead;
+    @Column(name = "GROUP_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer groupPermissionWrite;
+    @Column(name = "PUBLIC_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer publicPermissionRead;
+    @Column(name = "PUBLIC_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
+    private Integer publicPermissionWrite;
     @Column(name = "REG_DATE", nullable = false, insertable = true, updatable = true)
-    private Timestamp regDate;
+    private LocalDateTime regDate;
     @Column(name = "UPT_DATE", nullable = true, insertable = true, updatable = true)
-    private Timestamp uptDate;
-
-    @ManyToOne
-    @JoinColumn(name = "MY_FILES_FILE_SEQ", referencedColumnName = "FILE_SEQ", nullable = false)
-    private MyFiles myFilesByMyFilesFileSeq;
+    private LocalDateTime uptDate;
 
     @Builder
     public FilePermission(
-            String fileOwnerPermissionRead,
-            String fileOwnerPermissionWrite,
-            String fileGroupPermissionRead,
-            String fileGroupPermissionWrite,
-            String fileAlluserPermissionRead,
-            String fileAlluserPermissionWrite) {
-        this.fileOwnerPermissionRead = fileOwnerPermissionRead;
-        this.fileOwnerPermissionWrite = fileOwnerPermissionWrite;
-        this.fileGroupPermissionRead = fileGroupPermissionRead;
-        this.fileGroupPermissionWrite = fileGroupPermissionWrite;
-        this.fileAlluserPermissionRead = fileAlluserPermissionRead;
-        this.fileAlluserPermissionWrite = fileAlluserPermissionWrite;
+            Integer fileOwnerPermissionRead,
+            Integer ownerPermissionWrite,
+            Integer groupPermissionRead,
+            Integer groupPermissionWrite,
+            Integer publicPermissionRead,
+            Integer fileAllUserPermissionWrite,
+            MyFiles myFileSeq) {
+        this.ownerPermissionRead = fileOwnerPermissionRead;
+        this.ownerPermissionWrite = ownerPermissionWrite;
+        this.groupPermissionRead = groupPermissionRead;
+        this.groupPermissionWrite = groupPermissionWrite;
+        this.publicPermissionRead = publicPermissionRead;
+        this.publicPermissionWrite = fileAllUserPermissionWrite;
     }
 }

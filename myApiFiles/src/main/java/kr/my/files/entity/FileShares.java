@@ -20,25 +20,22 @@ import java.sql.Timestamp;
 public class FileShares {
     @Id @GeneratedValue @Column(name = "SHARE_SEQ", nullable = false, insertable = true, updatable = true)
     private Long shareSeq;
-
-    @Column(name = "FILE_LINKED", nullable = true, insertable = true, updatable = true, length = 255)
-    private String fileLinked;
-
+    @Column(name = "FILE_LINK_URL", nullable = true, insertable = true, updatable = true, length = 255)
+    private String fileLinkUrl;
     @Column(name = "FILE_LINK_TYPE", nullable = true, insertable = true, updatable = true, length = 50)
     private String fileLinkType;
-
     @Column(name = "REG_DATE", nullable = true, insertable = true, updatable = true)
     private Timestamp regDate;
 
     @JoinColumn(name = "MY_FILES_FILE_SEQ", referencedColumnName = "FILE_SEQ", nullable = false)
     @ManyToOne
-    private MyFiles myFilesByMyFilesFileSeq;
+    private MyFiles myFileSeq;
 
     @Builder
-    public FileShares(String fileLinked, String fileLinkType, Timestamp regDate, Long myFilesFileSeq, MyFiles myFilesByMyFilesFileSeq) {
-        this.fileLinked = fileLinked;
+    public FileShares(String fileLinkUrl, String fileLinkType, Timestamp regDate, MyFiles myFileSeq) {
+        this.fileLinkUrl = fileLinkUrl;
         this.fileLinkType = fileLinkType;
         this.regDate = regDate;
-        this.myFilesByMyFilesFileSeq = myFilesByMyFilesFileSeq;
+        this.myFileSeq = myFileSeq;
     }
 }
