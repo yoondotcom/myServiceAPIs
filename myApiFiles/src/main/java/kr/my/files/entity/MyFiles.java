@@ -48,7 +48,8 @@ public class MyFiles {
     @Column(name = "FILE_CONTENT_TYPE", nullable = true, insertable = true, updatable = true, length = 200)
     private String fileContentType;
 
-    @OneToOne(mappedBy = "fileRoleSeq")
+    @OneToOne
+    @JoinColumn(name = "FILE_ROLE_SEQ")
     private FilePermission filePermissions;
 
     @ManyToOne
