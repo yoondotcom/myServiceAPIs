@@ -9,10 +9,12 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,6 +40,12 @@ public class FileStorageService {
         }
     }
 
+
+    /**
+     * 1. dffdddd
+     * @param file dadad
+     * @return
+     */
     public String storeFile(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -50,14 +58,19 @@ public class FileStorageService {
 
             // Copy file to the target location (Replacing existing file with the same name)
 
-            String name = makeCheckSumFile(file.getInputStream());
 
-            Path targetLocation = this.fileStorageLocation.resolve(name);
+            String digestFileName = DigestUtils.md5Hex(file.getInputStream());
+
+
+
+            Path targetLocation = this.fileStorageLocation.resolve(digestFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return name;
 
-        } catch (IOException | NoSuchAlgorithmException ex) {
+
+            return digestFileName;
+
+        } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
@@ -76,22 +89,7 @@ public class FileStorageService {
         }
     }
 
-    public String makeCheckSumFile(MultipartFile file) throws NoSuchAlgorithmException, IOException {
 
-        //Use MD5 algorithm
-        MessageDigest md5Digest = MessageDigest.getInstance("MD5");
-
-        System.out.println(file.getResource().getFile());
-
-        //Get the checksum
-        String checksum = getFileChecksum(md5Digest, file.getResource().getFile());
-
-        //see checksum
-        System.out.println(checksum);
-
-        return checksum;
-
-    }
 
     private static String getFileChecksum(MessageDigest digest, File file) throws IOException
     {
