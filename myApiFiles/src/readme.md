@@ -16,6 +16,9 @@
     - 읽기, 쓰기
 
 ####파일일 특정 태그 일때 특정 서버 경로로 저장 가능
+ - ConfigurationProperties 
+ - https://sgc109.github.io/2020/07/07/spring-boot-configuration-properties/
+
 ```
 file.upload-dir= D:\Downloads
 file.public-space-dir= D:\Downloads\public
