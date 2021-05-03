@@ -16,7 +16,11 @@
     - 읽기, 쓰기
 
 ####파일일 특정 태그 일때 특정 서버 경로로 저장 가능
-..
+```
+file.upload-dir= D:\Downloads
+file.public-space-dir= D:\Downloads\public
+file.protect-space-dir= D:\Downloads\protect
+```
 
 ####전문포멧
 ```
