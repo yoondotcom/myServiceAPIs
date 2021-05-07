@@ -11,7 +11,8 @@
     5. 파일 요청 퍼미션 요청사항에 따라 저장 위치를 달리 한다.
         => 전체 공계 파일 file.public-space-dir
         => 보호된 파일 file.protect-space-dir
-    6.  
+    6. 파일 유형을 분석해서 경로 분류
+        => https://myhappyman.tistory.com/133
 ####확장자: file 로 통일 (public 파일 제외)
 ####원본파일 정보는 DB에 별도 저장
 #### 말단 디렉터리에 파일 정보 저장 : 원본파일.확장자 => MD5.file
