@@ -3,6 +3,7 @@ package kr.my.files.service;
 import kr.my.files.exception.FileStorageException;
 import kr.my.files.exception.MyFileNotFoundException;
 import kr.my.files.property.FileStorageProperties;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -20,8 +21,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import org.apache.tika.Tika;
+
+import static kr.my.files.commons.utils.CheckFileType.isAllowedMIMEType;
 
 @Service
 public class FileStorageService {
@@ -50,6 +52,11 @@ public class FileStorageService {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
+        String ext = FilenameUtils.getExtension(fileName);
+
+        System.out.println(fileName);
+        System.out.println(ext);
+
         try {
             // Check if the file's name contains invalid characters
             if(fileName.contains("..")) {
@@ -57,16 +64,14 @@ public class FileStorageService {
             }
 
             // Copy file to the target location (Replacing existing file with the same name)
-
-
             String digestFileName = DigestUtils.md5Hex(file.getInputStream());
 
+            String mimeType = new Tika().detect(file.getInputStream());
 
+            System.out.println(mimeType);
 
             Path targetLocation = this.fileStorageLocation.resolve(digestFileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
-
 
             return digestFileName;
 
@@ -87,39 +92,5 @@ public class FileStorageService {
         } catch (MalformedURLException ex) {
             throw new MyFileNotFoundException("File not found " + fileName, ex);
         }
-    }
-
-
-
-    private static String getFileChecksum(MessageDigest digest, File file) throws IOException
-    {
-        //Get file input stream for reading the file content
-        FileInputStream fis = new FileInputStream(file);
-
-        //Create byte array to read data in chunks
-        byte[] byteArray = new byte[1024];
-        int bytesCount = 0;
-
-        //Read file data and update in message digest
-        while ((bytesCount = fis.read(byteArray)) != -1) {
-            digest.update(byteArray, 0, bytesCount);
-        };
-
-        //close the stream; We don't need it now.
-        fis.close();
-
-        //Get the hash's bytes
-        byte[] bytes = digest.digest();
-
-        //This bytes[] has bytes in decimal format;
-        //Convert it to hexadecimal format
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i< bytes.length ;i++)
-        {
-            sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-        }
-
-        //return complete hash
-        return sb.toString();
     }
 }

@@ -13,6 +13,17 @@
         => 보호된 파일 file.protect-space-dir
     6. 파일 유형을 분석해서 경로 분류
         => https://myhappyman.tistory.com/133
+
+
+###
+application/x-tika-msoffice => haansoft-hwp
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet => application/x-tika-msoffice
+application/vnd.openxmlformats-officedocument.presentationml.presentation => application/x-tika-msoffice
+application/vnd.openxmlformats-officedocument.wordprocessingml.document => application/x-tika-msoffice
+
+
+
+
 ####확장자: file 로 통일 (public 파일 제외)
 ####원본파일 정보는 DB에 별도 저장
 #### 말단 디렉터리에 파일 정보 저장 : 원본파일.확장자 => MD5.file
