@@ -1,5 +1,6 @@
 package kr.my.files.controller;
 
+import kr.my.files.dto.UploadFileRequest;
 import kr.my.files.dto.UploadFileResponse;
 import kr.my.files.service.FileStorageService;
 import org.slf4j.Logger;
@@ -39,6 +40,34 @@ public class FileController {
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
     }
+
+
+    /**
+     * TODO 작업중..
+     * File and Permisssion 정보 저장.
+     * @param request
+     * @param file
+     * @return
+     */
+    @PostMapping(
+            value = "/upload-file-permission",
+            consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE }
+    )
+    public UploadFileResponse uploadFileAndPerMission(
+            @RequestPart("permission") UploadFileRequest request,
+            @RequestPart("file") MultipartFile file) {
+        String fileName = fileStorageService.storeFile(file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+
+        return new UploadFileResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
+    }
+
+
 
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
