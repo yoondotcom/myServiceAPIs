@@ -21,39 +21,23 @@ import java.time.LocalDateTime;
 @Table(name = "FILE_PERMISSION")
 public class FilePermission {
 
-    @Id @Column(name = "FILE_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
+    @Id @GeneratedValue
+    @Column(name = "FILE_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
     private Long fileRoleSeq;
     @Column(name = "OWNER_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
-    private Integer ownerPermissionRead;
+    private Integer ownerPermission;
     @Column(name = "OWNER_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
-    private Integer ownerPermissionWrite;
-    @Column(name = "GROUP_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
-    private Integer groupPermissionRead;
+    private Integer groupPermission;
     @Column(name = "GROUP_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
-    private Integer groupPermissionWrite;
-    @Column(name = "PUBLIC_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
-    private Integer publicPermissionRead;
-    @Column(name = "PUBLIC_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
-    private Integer publicPermissionWrite;
+    private Integer publicPermission;
     @Column(name = "REG_DATE", nullable = false, insertable = true, updatable = true)
     private LocalDateTime regDate;
     @Column(name = "UPT_DATE", nullable = true, insertable = true, updatable = true)
     private LocalDateTime uptDate;
 
-    @Builder
-    public FilePermission(
-            Integer fileOwnerPermissionRead,
-            Integer ownerPermissionWrite,
-            Integer groupPermissionRead,
-            Integer groupPermissionWrite,
-            Integer publicPermissionRead,
-            Integer fileAllUserPermissionWrite,
-            MyFiles myFileSeq) {
-        this.ownerPermissionRead = fileOwnerPermissionRead;
-        this.ownerPermissionWrite = ownerPermissionWrite;
-        this.groupPermissionRead = groupPermissionRead;
-        this.groupPermissionWrite = groupPermissionWrite;
-        this.publicPermissionRead = publicPermissionRead;
-        this.publicPermissionWrite = fileAllUserPermissionWrite;
+    public FilePermission(Integer ownerPermission, Integer groupPermission, Integer publicPermission) {
+        this.ownerPermission = ownerPermission;
+        this.groupPermission = groupPermission;
+        this.publicPermission = publicPermission;
     }
 }

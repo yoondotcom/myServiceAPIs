@@ -27,6 +27,11 @@
 jellyfish-4925772__340.jpg => image/jpeg
 2021-01-14 08;40;18.PNG => image/png
 
+r(Read) : 4
+w(Write) : 2
+x(Execute) : 1
+r + w + x : 7
+
 
 
 ####확장자: file 로 통일 (public 파일 제외)

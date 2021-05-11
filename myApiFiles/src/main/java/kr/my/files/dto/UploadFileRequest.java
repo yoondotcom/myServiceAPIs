@@ -10,8 +10,8 @@ import lombok.*;
 @ToString
 public class UploadFileRequest {
     private String fileName;
-    private String ownerPermission;  //rw
-    private String groupPermission;  //rw
-    private String publicPermission; //rw
+    private int ownerPermission;  //rw = 6, r = 4, w = 2
+    private int groupPermission;  //rw = 6, r = 4, w = 2
+    private int publicPermission; //rw = 6, r = 4, w = 2
 
 }
