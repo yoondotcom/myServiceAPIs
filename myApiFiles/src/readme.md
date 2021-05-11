@@ -15,12 +15,17 @@
         => https://myhappyman.tistory.com/133
 
 
-###
-application/x-tika-msoffice => haansoft-hwp
-application/vnd.openxmlformats-officedocument.spreadsheetml.sheet => application/x-tika-msoffice
-application/vnd.openxmlformats-officedocument.presentationml.presentation => application/x-tika-msoffice
-application/vnd.openxmlformats-officedocument.wordprocessingml.document => application/x-tika-msoffice
+####
+~.hwp =>  application/x-tika-msoffice
+~.xlsx => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet 
+~.pptx => application/vnd.openxmlformats-officedocument.presentationml.presentation
+~.docx => application/vnd.openxmlformats-officedocument.wordprocessingml.document
+~.doc =>  application/x-tika-msoffice
+~.xls  => application/x-tika-msoffice
+~.json => text/plain
 
+jellyfish-4925772__340.jpg => image/jpeg
+2021-01-14 08;40;18.PNG => image/png
 
 
 

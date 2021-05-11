@@ -21,6 +21,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
+
 import org.apache.tika.Tika;
 
 import static kr.my.files.commons.utils.CheckFileType.isAllowedMIMEType;
@@ -66,11 +68,14 @@ public class FileStorageService {
             // Copy file to the target location (Replacing existing file with the same name)
             String digestFileName = DigestUtils.md5Hex(file.getInputStream());
 
+            digestFileName.concat(".").concat(ext);
+
             String mimeType = new Tika().detect(file.getInputStream());
 
             System.out.println(mimeType);
 
-            Path targetLocation = this.fileStorageLocation.resolve(digestFileName);
+            Path targetLocation = this.fileStorageLocation.resolve(digestFileName); //경로 만들기.
+
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             return digestFileName;
