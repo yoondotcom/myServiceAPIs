@@ -44,14 +44,13 @@ public class FileController {
 
 
     /**
-     * TODO 작업중..
      * File and Permisssion 정보 저장.
      * @param
      * @param
      * @return
      */
     @PostMapping(value = "/upload-file-permission")
-    public UploadFileResponse uploadFileAndPerMission(
+    public UploadFileResponse uploadFileAndPerMissionJustForm(
             @ModelAttribute  UploadFileInfo fileInfo, ModelMap modelMap) {
 
         modelMap.addAttribute("fileInfo", fileInfo);
@@ -67,7 +66,20 @@ public class FileController {
                 fileInfo.getFile().getContentType(), fileInfo.getFile().getSize());
     }
 
+    //TODO file, json submit 구현.
+    @PostMapping(value = "/upload-file-permission")
+    public UploadFileResponse uploadFileAndPerMissionWithJson(){
+        return null;
+    }
 
+
+
+
+    /**
+     * TODO 작업 중.
+     * @param files
+     * @return
+     */
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.asList(files)
@@ -75,6 +87,7 @@ public class FileController {
                 .map(file -> uploadFile(file))
                 .collect(Collectors.toList());
     }
+
 
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
