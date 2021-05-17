@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -45,17 +46,17 @@ public class FileController {
     /**
      * TODO 작업중..
      * File and Permisssion 정보 저장.
-     * @param fileRequest
-     * @param file
+     * @param
+     * @param
      * @return
      */
     @PostMapping(value = "/upload-file-permission")
     public UploadFileResponse uploadFileAndPerMission(
-            @RequestParam("fileInfo") UploadFileInfo fileRequest,
-            @RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+            @ModelAttribute  UploadFileInfo fileInfo, ModelMap modelMap) {
 
-        System.out.println(fileRequest);
+        modelMap.addAttribute("fileInfo", fileInfo);
+
+        String fileName = fileStorageService.storeFile(fileInfo.getFile());
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
@@ -63,9 +64,8 @@ public class FileController {
                 .toUriString();
 
         return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
+                fileInfo.getFile().getContentType(), fileInfo.getFile().getSize());
     }
-
 
 
     @PostMapping("/uploadMultipleFiles")

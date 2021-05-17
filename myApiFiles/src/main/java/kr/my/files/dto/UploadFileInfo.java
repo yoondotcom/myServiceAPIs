@@ -2,6 +2,7 @@ package kr.my.files.dto;
 
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Builder
 @NoArgsConstructor
@@ -13,5 +14,6 @@ public class UploadFileInfo {
     private int ownerPermission;  //rw = 6, r = 4, w = 2
     private int groupPermission;  //rw = 6, r = 4, w = 2
     private int publicPermission; //rw = 6, r = 4, w = 2
+    private MultipartFile file;
 
 }
