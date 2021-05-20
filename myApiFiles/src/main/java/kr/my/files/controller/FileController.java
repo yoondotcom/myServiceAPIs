@@ -70,7 +70,32 @@ public class FileController {
                 fileInfo.getFile().getContentType(), fileInfo.getFile().getSize());
     }
 
-    //TODO file, json submit 구현.
+    @PostMapping(value = "/upload-file-permission-json-file")
+    public ResponseEntity<FileMetadata> uploadFileAndPerMissionWithJsonFile(
+            @RequestPart(value = "file") MultipartFile file,
+            @RequestPart(value = "metadata", required = false) FileMetadata metadata){
+
+        //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
+        if (metadata == null) {
+            metadata = new FileMetadata(file.getName(), 6,0,0);
+        }
+
+        String fileName = fileStorageService.storeFile(file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+
+        metadata.setName(fileName);
+        metadata.setLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+        metadata.setDownloadPath(fileDownloadUri);
+
+        return ResponseEntity.ok(metadata);
+    }
+
+
     @PostMapping(value = "/upload-file-permission-json")
     public ResponseEntity<FileMetadata> uploadFileAndPerMissionWithJson(
             @RequestPart(value = "file") MultipartFile file,

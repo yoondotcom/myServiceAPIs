@@ -38,32 +38,30 @@ public class FileControllerTest {
                 .param("fileName", "aaa.txt")
                 .param("ownerPermission", "6"))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-
+                .andExpect(status().is2xxSuccessful())
+        ;
     }
 
     @Test
     @DisplayName("file, permission.json submit 테스트")
     void uploadShouldReturnMetadataName() throws Exception {
         //Given
-        MockMultipartFile file = new MockMultipartFile("file", "hello.text",
+        MockMultipartFile file = new MockMultipartFile("file", "hello.txt",
                 TEXT_PLAIN_VALUE, "Hello, World!".getBytes(StandardCharsets.UTF_8));
-
 
         MockMultipartFile metadata = new MockMultipartFile(
                 "medadata",
                 "metadata",
                 APPLICATION_JSON_VALUE,
                 new ObjectMapper()
-                        .writeValueAsString( new FileMetadata("helloworld", 6, 6, 6))
+                        .writeValueAsString( new FileMetadata("hello world", 6, 6, 6))
                         .getBytes(StandardCharsets.UTF_8));
 
-        mockMvc.perform(multipart("/upload-file-permission-json")
+        mockMvc.perform(multipart("/upload-file-permission-json-file")
                 .file(file).file(metadata))
-                .andDo(print());
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+        ;
 
     }
-
-
-
 }
