@@ -13,20 +13,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Optional;
 
 import org.apache.tika.Tika;
-
-import static kr.my.files.commons.utils.CheckFileType.isAllowedMIMEType;
 
 @NoArgsConstructor
 @Service
@@ -34,6 +28,7 @@ public class FileStorageService {
 
     private Path fileStorageLocation;
 
+    @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
         this.fileStorageLocation = Paths
                 .get(fileStorageProperties.getUploadDir())
@@ -55,26 +50,13 @@ public class FileStorageService {
     public String storeFile(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
         String ext = FilenameUtils.getExtension(fileName);
 
-        System.out.println(fileName);
-        System.out.println(ext);
-
         try {
-            // Check if the file's name contains invalid characters
             if(fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
-
-            // Copy file to the target location (Replacing existing file with the same name)
-            String digestFileName = DigestUtils.md5Hex(file.getInputStream());
-
-            digestFileName.concat(".").concat(ext);
-
-            String mimeType = new Tika().detect(file.getInputStream());
-
-            System.out.println(mimeType);
+            String digestFileName = getHashFileName(file, ext);
 
             Path targetLocation = this.fileStorageLocation.resolve(digestFileName); //경로 만들기.
 
@@ -85,6 +67,33 @@ public class FileStorageService {
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
+    }
+
+    /**
+     * file hash 명을 만든가.
+     * @param file
+     * @param ext
+     * @return
+     * @throws IOException
+     */
+    private String getHashFileName(MultipartFile file, String ext) throws IOException {
+        String digestFileName = DigestUtils.md5Hex(file.getInputStream());
+        digestFileName = digestFileName.concat(".").concat(ext);
+
+        String mimeType = getFileMimeType(file);
+
+        return digestFileName;
+    }
+
+    /**
+     * 파일 mine type을 확인 한다.
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    private String getFileMimeType(MultipartFile file) throws IOException {
+        String mimeType = new Tika().detect(file.getInputStream());
+        return mimeType;
     }
 
     public Resource loadFileAsResource(String fileName) {

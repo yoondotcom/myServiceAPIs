@@ -18,6 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -31,10 +32,18 @@ public class FileControllerTest {
     @DisplayName("file, permission 정보 form submit 테스트 ")
     void uploadFileSubmitTest() throws Exception {
 
+        MockMultipartFile file = new MockMultipartFile("file","test.txt" , "text/plain" , "hello file".getBytes());
+        this.mockMvc.perform(multipart("/upload-file-permission")
+                .file(file)
+                .param("fileName", "aaa.txt")
+                .param("ownerPermission", "6"))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+
     }
 
     @Test
-    @DisplayName("file, permission.json 동시저장 테스트")
+    @DisplayName("file, permission.json submit 테스트")
     void uploadShouldReturnMetadataName() throws Exception {
         //Given
         MockMultipartFile file = new MockMultipartFile("file", "hello.text",
@@ -45,7 +54,9 @@ public class FileControllerTest {
                 "medadata",
                 "metadata",
                 APPLICATION_JSON_VALUE,
-                new ObjectMapper().writeValueAsString(new FileMetadata("helloworld", 6, 6, 6)).getBytes(StandardCharsets.UTF_8));
+                new ObjectMapper()
+                        .writeValueAsString( new FileMetadata("helloworld", 6, 6, 6))
+                        .getBytes(StandardCharsets.UTF_8));
 
         mockMvc.perform(multipart("/upload-file-permission-json")
                 .file(file).file(metadata))
