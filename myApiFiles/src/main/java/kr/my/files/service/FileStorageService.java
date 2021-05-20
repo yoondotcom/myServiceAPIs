@@ -3,6 +3,7 @@ package kr.my.files.service;
 import kr.my.files.exception.FileStorageException;
 import kr.my.files.exception.MyFileNotFoundException;
 import kr.my.files.property.FileStorageProperties;
+import lombok.NoArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -27,16 +28,17 @@ import org.apache.tika.Tika;
 
 import static kr.my.files.commons.utils.CheckFileType.isAllowedMIMEType;
 
+@NoArgsConstructor
 @Service
 public class FileStorageService {
 
-    private final Path fileStorageLocation;
+    private Path fileStorageLocation;
 
-    @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
-        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
-                .toAbsolutePath().normalize();
-
+        this.fileStorageLocation = Paths
+                .get(fileStorageProperties.getUploadDir())
+                .toAbsolutePath()
+                .normalize();
         try {
             Files.createDirectories(this.fileStorageLocation);
         } catch (Exception ex) {

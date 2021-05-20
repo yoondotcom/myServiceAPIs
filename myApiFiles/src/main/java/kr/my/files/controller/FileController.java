@@ -1,5 +1,6 @@
 package kr.my.files.controller;
 
+import kr.my.files.dto.FileMetadata;
 import kr.my.files.dto.UploadFileInfo;
 import kr.my.files.dto.UploadFileResponse;
 import kr.my.files.service.FileStorageService;
@@ -26,8 +27,11 @@ public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
-    @Autowired
     private FileStorageService fileStorageService;
+
+    public FileController(FileStorageService fileStorageService) {
+        this.fileStorageService = fileStorageService;
+    }
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
@@ -67,20 +71,40 @@ public class FileController {
     }
 
     //TODO file, json submit 구현.
-    @PostMapping(value = "/upload-file-permission")
-    public UploadFileResponse uploadFileAndPerMissionWithJson(){
-        return null;
+    @PostMapping(value = "/upload-file-permission-json")
+    public ResponseEntity<FileMetadata> uploadFileAndPerMissionWithJson(
+            @RequestPart(value = "file") MultipartFile file,
+            @RequestPart(value = "metadata", required = false) FileMetadata metadata){
+
+        //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
+        if (metadata == null) {
+            metadata = new FileMetadata(file.getName(), 6,0,0);
+        }
+
+        String fileName = fileStorageService.storeFile(file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+
+        metadata.setName(fileName);
+        metadata.setLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+        metadata.setDownloadPath(fileDownloadUri);
+
+        return ResponseEntity.ok(metadata);
     }
 
 
 
 
     /**
-     * TODO 작업 중.
+     * TODO 다중파일 저장. 작업 중.
      * @param files
      * @return
      */
-    @PostMapping("/uploadMultipleFiles")
+    @PostMapping("/upload-files-permission")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.asList(files)
                 .stream()
