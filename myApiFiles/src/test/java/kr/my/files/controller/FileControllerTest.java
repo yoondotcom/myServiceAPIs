@@ -78,8 +78,7 @@ public class FileControllerTest {
         mockMvc.perform(multipart("/upload-file-permission-json")
                 .file(file)
                 .accept(APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(metadata))
-        )
+                .content(objectMapper.writeValueAsString(metadata)))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
