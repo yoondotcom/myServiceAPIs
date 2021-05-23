@@ -71,7 +71,7 @@ public class FileController {
     }
 
     /**
-     * Form 과 json 파일로 요청 일반적인 ajax 로 호출 가능.
+     * Form 과 json 파일로 요청
      * @param file
      * @param metadata
      * @return
@@ -100,6 +100,43 @@ public class FileController {
 
         return ResponseEntity.ok(metadata);
     }
+
+    /**
+     * Form 과 Json으로 요청
+     * @param file
+     * @param metadata
+     * @return
+     */
+    @PostMapping(value = "/upload-file-permission-json",
+            consumes = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<FileMetadata> uploadFileAndPerMissionWithJson(
+            @RequestPart(value = "file") MultipartFile file,
+            @RequestPart(value = "metadata", required = false) FileMetadata metadata){
+
+        //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
+        if (metadata == null) {
+            metadata = new FileMetadata(file.getName(), 6,0,0);
+        }
+
+        String fileName = fileStorageService.storeFile(file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
+
+        metadata.setName(fileName);
+        metadata.setLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+        metadata.setDownloadPath(fileDownloadUri);
+
+        return ResponseEntity.ok(metadata);
+    }
+
+
+
 
     /**
      * TODO 다중파일 저장. 작업 중.

@@ -27,6 +27,8 @@ public class FileControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Test
     @DisplayName("file, permission 정보 form submit 테스트 ")
@@ -68,24 +70,17 @@ public class FileControllerTest {
     @DisplayName("file, permission 정보 ")
     void uploadShouldReturnMetadataNameWithJson() throws Exception {
         //Given
-        MockMultipartFile file = new MockMultipartFile("file", "hello.txt",
-                TEXT_PLAIN_VALUE, "Hello, World!".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile file = new MockMultipartFile("file", "hello2.txt",
+                TEXT_PLAIN_VALUE, "Hello, World! JSON Meta".getBytes(StandardCharsets.UTF_8));
 
-        MockMultipartFile metadata = new MockMultipartFile(
-                "medadata",
-                "metadata",
-                APPLICATION_JSON_VALUE,
-                new ObjectMapper()
-                        .writeValueAsString( new FileMetadata("hello world", 6, 6, 6))
-                        .getBytes(StandardCharsets.UTF_8));
+        FileMetadata metadata = new FileMetadata("hello world", 6, 6, 6);
 
         mockMvc.perform(multipart("/upload-file-permission-json")
-                .file(file).file(metadata))
+                .file(file)
+                .accept(APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(metadata))
+        )
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful())
-        ;
+                .andExpect(status().is2xxSuccessful());
     }
-
-
-
 }
