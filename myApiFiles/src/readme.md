@@ -48,9 +48,9 @@ r + w + x : 7
     - https://blogs.perficient.com/2020/07/27/requestbody-and-multipart-on-spring-boot/
     - test case는 되나 post man으로는 처리 되지 않음.
 ```
-file.upload-dir= D:\Downloads
-file.public-space-dir= D:\Downloads\public
-file.protect-space-dir= D:\Downloads\protect
+file.upload-dir= ${user.home}/Download
+file.public-space-dir= ${user.home}/Download
+file.protect-space-dir= D${user.home}/Download
 ```
 
 ####전문포멧
