@@ -37,7 +37,4 @@ public class MyUsers {
     @Column(name = "UPT_DATE", nullable = true, insertable = true, updatable = true)
     private Timestamp uptDate;
 
-    @OneToMany(mappedBy = "myUsersByUserCode")
-    private Collection<UserFilePermissions> userFilePermissionsByUserCode;
-
 }
