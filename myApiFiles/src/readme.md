@@ -1,3 +1,15 @@
+
+1. 프로젝트 구성안내
+2. 프로젝트 설치 안내
+3. 프로젝트 구동 안내 
+4. 프로젝트 사용법
+5. 프로젝트 기능설명
+6. 저작권 및 사용자 정보
+7. 버그
+8. 프로그램 작성자 및 도움을 준 사람
+9. 버전 (업데이트 소식)
+10. FAQ
+
 ##File upload
 #### 파일저장: path YYYY/MM/DD/HH
 #### 파일명: hash (MD5) 저장
@@ -47,6 +59,7 @@ r + w + x : 7
  - spring boot json 과 파일 동시 처리 관련 포스트 : 
     - https://blogs.perficient.com/2020/07/27/requestbody-and-multipart-on-spring-boot/
     - test case는 되나 post man으로는 처리 되지 않음.
+  - 사용자 파일 저장 프로퍼티 값   
 ```
 file.upload-dir= ${user.home}/Download
 file.public-space-dir= ${user.home}/Download

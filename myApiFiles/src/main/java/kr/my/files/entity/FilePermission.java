@@ -24,11 +24,11 @@ public class FilePermission {
     @Id @GeneratedValue
     @Column(name = "FILE_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
     private Long fileRoleSeq;
-    @Column(name = "OWNER_PERMISSION_READ", nullable = false, insertable = true, updatable = true, length = 1)
+    @Column(name = "OWNER_PERMISSION", nullable = false, insertable = true, updatable = true, length = 1)
     private Integer ownerPermission;
-    @Column(name = "OWNER_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
+    @Column(name = "GROOUP_PERMISSION", nullable = false, insertable = true, updatable = true, length = 1)
     private Integer groupPermission;
-    @Column(name = "GROUP_PERMISSION_WRITE", nullable = false, insertable = true, updatable = true, length = 1)
+    @Column(name = "PUBLIC_PERMISSION", nullable = false, insertable = true, updatable = true, length = 1)
     private Integer publicPermission;
     @Column(name = "REG_DATE", nullable = false, insertable = true, updatable = true)
     private LocalDateTime regDate;
