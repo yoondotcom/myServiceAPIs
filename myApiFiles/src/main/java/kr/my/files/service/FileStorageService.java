@@ -43,8 +43,8 @@ public class FileStorageService {
 
 
     /**
-     * 1. dffdddd
-     * @param file dadad
+     * 1. 업로드된 파일을 지정된 경로에 저장한다.
+     * @param file
      * @return
      */
     public String storeFile(MultipartFile file) {

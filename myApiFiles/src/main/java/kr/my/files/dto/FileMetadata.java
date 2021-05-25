@@ -19,6 +19,7 @@ public class FileMetadata {
     private int publicPermission; //rw = 6, r = 4, w = 2
     private long length;
     private String downloadPath;
+    private String originFileName;
 
     public FileMetadata(String name, int ownerPermission, int groupPermission, int publicPermission) {
         this.name = name;

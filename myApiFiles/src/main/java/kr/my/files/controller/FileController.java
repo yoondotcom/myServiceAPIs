@@ -131,6 +131,7 @@ public class FileController {
         metadata.setLength(file.getSize());
         metadata.setContentType(file.getContentType());
         metadata.setDownloadPath(fileDownloadUri);
+        metadata.setOriginFileName(file.getOriginalFilename());
 
         return ResponseEntity.ok(metadata);
     }
