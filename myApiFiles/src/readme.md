@@ -26,6 +26,13 @@
     6. 파일 유형을 분석해서 경로 분류
         => https://myhappyman.tistory.com/133
 
+### 파일업로그 기능 목록
+    1. 파일업로드 기능
+    2. 파일복사 기능 
+    3. 경로분리 기능 공개, 비공계
+    4. 경로작성 기능  ~/filePaht/YYYY/MM/DD/HH
+    5. 파일읽어 http, https 로 내려주기 
+
 
 ####
 ~.hwp =>  application/x-tika-msoffice

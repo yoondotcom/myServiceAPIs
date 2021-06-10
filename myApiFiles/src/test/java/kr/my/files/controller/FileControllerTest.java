@@ -82,4 +82,44 @@ public class FileControllerTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
+
+    @Test
+    @DisplayName("모두 공계 파일일때 별도 지정된 디렉터리로 저장 여부 확인")
+    void uploadFPublicFile() throws Exception{
+        //given
+        //when
+        //then
+    }
+
+    @Test
+    @DisplayName("파일 저장시 일자에 맞는 디렉터리 구조로 저장 되는지 확인")
+    void checkFileSavePath() throws Exception{
+        //given
+        //when
+        //then
+    }
+
+    @Test
+    @DisplayName("파일요청서 퍼미션에 대당 하지 않으면 정보 열람을 거부한다.")
+    void checkFilePermission() throws Exception{
+        //given
+        //when
+        //then
+    }
+
+    @Test
+    @DisplayName("업로드된 파일에 대해서 파일 다운로드 요청 관련 정보를 던지면 파일을 다운로드 한다.")
+    void downloadFile() throws Exception{
+        //given
+        //when
+        //then
+    }
+
+    @Test
+    @DisplayName("업로드된 파일에 대해서 파일 다운로드 요청 요청정보를 던지면 소유주만 파일을 다운로드 한다.")
+    void downloadFilecheckFilePermission() throws Exception{
+        //given
+        //when
+        //then
+    }
 }
