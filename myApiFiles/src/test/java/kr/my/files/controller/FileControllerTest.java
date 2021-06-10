@@ -24,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class FileControllerTest {
 
+
     @Autowired
     MockMvc mockMvc;
 
@@ -122,4 +123,31 @@ public class FileControllerTest {
         //when
         //then
     }
+
+    @Test
+    @DisplayName("파일 메타정보 DB 입력")
+    void saveFileMetainfo() throws Exception {
+        //given
+        //when
+        //then
+    }
+
+    @Test
+    @DisplayName("파일 다운로드 기록 저장")
+    void saveFileDownloadPath() throws Exception {
+        //given
+        //when
+        //then
+    }
+
+    @Test
+    @DisplayName("파일 권한에 열람 가능자 정보를 ... ")
+    void testPermission(){
+        //given
+        //when
+        //then
+    }
+
+
+
 }
