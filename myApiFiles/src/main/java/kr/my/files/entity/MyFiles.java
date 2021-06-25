@@ -21,7 +21,7 @@ import java.util.Collection;
 @Getter
 @Entity
 @Table(name = "MY_FILES")
-public class MyFiles {
+public class MyFiles extends BaseTimeEntity {
     @Id
     @Column(name = "FILE_SEQ", nullable = false, insertable = true, updatable = true)
     private Long fileSeq;

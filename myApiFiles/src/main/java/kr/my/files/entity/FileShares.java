@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @Getter
 @Entity
 @Table(name = "FILE_SHARES")
-public class FileShares {
+public class FileShares extends BaseTimeEntity {
     @Id @GeneratedValue @Column(name = "SHARE_SEQ", nullable = false, insertable = true, updatable = true)
     private Long shareSeq;
     @Column(name = "FILE_LINK_URL", nullable = true, insertable = true, updatable = true, length = 255)

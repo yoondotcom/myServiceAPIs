@@ -20,7 +20,7 @@ import java.util.Collection;
 @Getter
 @Entity
 @Table(name = "MY_USERS")
-public class MyUsers {
+public class MyUsers extends BaseTimeEntity {
     @Id
     @Column(name = "USER_CODE", nullable = false, insertable = true, updatable = true, length = 15)
     private String userCode;
