@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 
 /**
  * Created by goodjwon on 16. 1. 16..
+ * 문건을 필요시애 다른 사용자에게 열람권한을 준다.
  */
 @NoArgsConstructor
 @AllArgsConstructor

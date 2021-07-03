@@ -10,6 +10,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by goodjwon on 16. 1. 16..
@@ -55,6 +56,9 @@ public class MyFiles extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "USER_CODE", referencedColumnName = "USER_CODE", nullable = false)
     private MyUsers myUsersByUserCode;
+
+    @OneToMany(mappedBy = "myFileSeq")
+    private List<FilePermissionGroup> filePermissionGroups;
 
     public MyFiles(String fileOrgName, String fileOwnerDisplayName,
                    String fileContentType, FilePermission filePermissions,
