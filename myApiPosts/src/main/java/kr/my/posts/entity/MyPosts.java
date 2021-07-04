@@ -232,9 +232,7 @@ public class MyPosts {
         if (commentStatus != null ? !commentStatus.equals(myPosts.commentStatus) : myPosts.commentStatus != null)
             return false;
         if (commontCnt != null ? !commontCnt.equals(myPosts.commontCnt) : myPosts.commontCnt != null) return false;
-        if (postRole != null ? !postRole.equals(myPosts.postRole) : myPosts.postRole != null) return false;
-
-        return true;
+        return postRole != null ? postRole.equals(myPosts.postRole) : myPosts.postRole == null;
     }
 
     @Override

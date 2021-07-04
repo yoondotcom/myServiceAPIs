@@ -116,10 +116,7 @@ public class Role {
         if (roleLevel != null ? !roleLevel.equals(role.roleLevel) : role.roleLevel != null) return false;
         if (roleGroup != null ? !roleGroup.equals(role.roleGroup) : role.roleGroup != null) return false;
         if (roleStatus != null ? !roleStatus.equals(role.roleStatus) : role.roleStatus != null) return false;
-        if (roleStatusDate != null ? !roleStatusDate.equals(role.roleStatusDate) : role.roleStatusDate != null)
-            return false;
-
-        return true;
+        return roleStatusDate != null ? roleStatusDate.equals(role.roleStatusDate) : role.roleStatusDate == null;
     }
 
     @Override

@@ -129,10 +129,7 @@ public class PostCommnets {
         if (commentUrl != null ? !commentUrl.equals(that.commentUrl) : that.commentUrl != null) return false;
         if (commentRegDate != null ? !commentRegDate.equals(that.commentRegDate) : that.commentRegDate != null)
             return false;
-        if (commentUptDate != null ? !commentUptDate.equals(that.commentUptDate) : that.commentUptDate != null)
-            return false;
-
-        return true;
+        return commentUptDate != null ? commentUptDate.equals(that.commentUptDate) : that.commentUptDate == null;
     }
 
     @Override

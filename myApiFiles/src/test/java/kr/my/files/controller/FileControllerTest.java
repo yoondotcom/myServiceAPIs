@@ -35,7 +35,7 @@ public class FileControllerTest {
     @DisplayName("file, permission 정보 form submit 테스트 ")
     void uploadFileSubmitTest() throws Exception {
 
-        MockMultipartFile file = new MockMultipartFile("file","test.txt" , "text/plain" , "hello file".getBytes());
+        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "hello file".getBytes());
         this.mockMvc.perform(multipart("/upload-file-permission")
                 .file(file)
                 .param("fileName", "aaa.txt")
@@ -57,7 +57,7 @@ public class FileControllerTest {
                 "metadata",
                 APPLICATION_JSON_VALUE,
                 new ObjectMapper()
-                        .writeValueAsString( new FileMetadata("hello world", 6, 6, 6))
+                        .writeValueAsString(new FileMetadata("hello world", 6, 6, 6))
                         .getBytes(StandardCharsets.UTF_8));
 
         mockMvc.perform(multipart("/upload-file-permission-json-file")
@@ -86,7 +86,7 @@ public class FileControllerTest {
 
     @Test
     @DisplayName("모두 공계 파일일때 별도 지정된 디렉터리로 저장 여부 확인")
-    void uploadFPublicFile() throws Exception{
+    void uploadFPublicFile() throws Exception {
         //given
         //when
         //then
@@ -94,7 +94,7 @@ public class FileControllerTest {
 
     @Test
     @DisplayName("파일 저장시 일자에 맞는 디렉터리 구조로 저장 되는지 확인")
-    void checkFileSavePath() throws Exception{
+    void checkFileSavePath() throws Exception {
         //given
         //when
         //then
@@ -102,7 +102,7 @@ public class FileControllerTest {
 
     @Test
     @DisplayName("파일요청서 퍼미션에 대당 하지 않으면 정보 열람을 거부한다.")
-    void checkFilePermission() throws Exception{
+    void checkFilePermission() throws Exception {
         //given
         //when
         //then
@@ -110,7 +110,7 @@ public class FileControllerTest {
 
     @Test
     @DisplayName("업로드된 파일에 대해서 파일 다운로드 요청 관련 정보를 던지면 파일을 다운로드 한다.")
-    void downloadFile() throws Exception{
+    void downloadFile() throws Exception {
         //given
         //when
         //then
@@ -118,7 +118,7 @@ public class FileControllerTest {
 
     @Test
     @DisplayName("업로드된 파일에 대해서 파일 다운로드 요청 요청정보를 던지면 소유주만 파일을 다운로드 한다.")
-    void downloadFilecheckFilePermission() throws Exception{
+    void downloadFilecheckFilePermission() throws Exception {
         //given
         //when
         //then
@@ -142,12 +142,11 @@ public class FileControllerTest {
 
     @Test
     @DisplayName("파일 권한에 열람 가능자 정보를 ... ")
-    void testPermission(){
+    void testPermission() {
         //given
         //when
         //then
     }
-
 
 
 }

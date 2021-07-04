@@ -66,9 +66,7 @@ public class MemAgreeys {
         if (maSeq != null ? !maSeq.equals(that.maSeq) : that.maSeq != null) return false;
         if (stipCode != null ? !stipCode.equals(that.stipCode) : that.stipCode != null) return false;
         if (agreeRegDate != null ? !agreeRegDate.equals(that.agreeRegDate) : that.agreeRegDate != null) return false;
-        if (singUpSeq != null ? !singUpSeq.equals(that.singUpSeq) : that.singUpSeq != null) return false;
-
-        return true;
+        return singUpSeq != null ? singUpSeq.equals(that.singUpSeq) : that.singUpSeq == null;
     }
 
     @Override

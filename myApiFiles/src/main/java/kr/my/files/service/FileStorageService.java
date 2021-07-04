@@ -44,6 +44,7 @@ public class FileStorageService {
 
     /**
      * 1. 업로드된 파일을 지정된 경로에 저장한다.
+     *
      * @param file
      * @return
      */
@@ -53,7 +54,7 @@ public class FileStorageService {
         String ext = FilenameUtils.getExtension(fileName);
 
         try {
-            if(fileName.contains("..")) {
+            if (fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
             String digestFileName = getHashFileName(file, ext);
@@ -71,6 +72,7 @@ public class FileStorageService {
 
     /**
      * file hash 명을 만든가.
+     *
      * @param file
      * @param ext
      * @return
@@ -87,6 +89,7 @@ public class FileStorageService {
 
     /**
      * 파일 mine type을 확인 한다.
+     *
      * @param file
      * @return
      * @throws IOException
@@ -100,7 +103,7 @@ public class FileStorageService {
         try {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
-            if(resource.exists()) {
+            if (resource.exists()) {
                 return resource;
             } else {
                 throw new MyFileNotFoundException("File not found " + fileName);

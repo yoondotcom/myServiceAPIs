@@ -152,10 +152,7 @@ public class EmployeeContSecInfo {
             return false;
         if (emplContStatusDate != null ? !emplContStatusDate.equals(that.emplContStatusDate) : that.emplContStatusDate != null)
             return false;
-        if (emplEmployeeCode != null ? !emplEmployeeCode.equals(that.emplEmployeeCode) : that.emplEmployeeCode != null)
-            return false;
-
-        return true;
+        return emplEmployeeCode != null ? emplEmployeeCode.equals(that.emplEmployeeCode) : that.emplEmployeeCode == null;
     }
 
     @Override

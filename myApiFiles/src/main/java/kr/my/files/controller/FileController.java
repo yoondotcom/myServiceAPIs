@@ -27,7 +27,7 @@ public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
-    private FileStorageService fileStorageService;
+    private final FileStorageService fileStorageService;
 
     public FileController(FileStorageService fileStorageService) {
         this.fileStorageService = fileStorageService;
@@ -49,13 +49,14 @@ public class FileController {
 
     /**
      * Form and Permission 정보 저장.
+     *
      * @param
      * @param
      * @return
      */
     @PostMapping(value = "/upload-file-permission")
     public UploadFileResponse uploadFileAndPerMissionJustForm(
-            @ModelAttribute  UploadFileInfo fileInfo, ModelMap modelMap) {
+            @ModelAttribute UploadFileInfo fileInfo, ModelMap modelMap) {
 
         modelMap.addAttribute("fileInfo", fileInfo);
 
@@ -72,6 +73,7 @@ public class FileController {
 
     /**
      * Form 과 json 파일로 요청
+     *
      * @param file
      * @param metadata
      * @return
@@ -79,11 +81,11 @@ public class FileController {
     @PostMapping(value = "/upload-file-permission-json-file")
     public ResponseEntity<FileMetadata> uploadFileAndPerMissionWithJsonFile(
             @RequestPart(value = "file") MultipartFile file,
-            @RequestPart(value = "metadata", required = false) FileMetadata metadata){
+            @RequestPart(value = "metadata", required = false) FileMetadata metadata) {
 
         //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
         if (metadata == null) {
-            metadata = new FileMetadata(file.getName(), 6,0,0);
+            metadata = new FileMetadata(file.getName(), 6, 0, 0);
         }
 
         String fileName = fileStorageService.storeFile(file);
@@ -103,21 +105,22 @@ public class FileController {
 
     /**
      * Form 과 Json으로 요청
+     *
      * @param file
      * @param metadata
      * @return
      */
     @PostMapping(value = "/upload-file-permission-json",
             consumes = {
-                MediaType.APPLICATION_JSON_VALUE,
-                MediaType.MULTIPART_FORM_DATA_VALUE})
+                    MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<FileMetadata> uploadFileAndPerMissionWithJson(
             @RequestPart(value = "file") MultipartFile file,
-            @RequestPart(value = "metadata", required = false) FileMetadata metadata){
+            @RequestPart(value = "metadata", required = false) FileMetadata metadata) {
 
         //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
         if (metadata == null) {
-            metadata = new FileMetadata(file.getName(), 6,0,0);
+            metadata = new FileMetadata(file.getName(), 6, 0, 0);
         }
 
         String fileName = fileStorageService.storeFile(file);
@@ -137,10 +140,9 @@ public class FileController {
     }
 
 
-
-
     /**
      * TODO 다중파일 저장. 작업 중.
+     *
      * @param files
      * @return
      */
@@ -167,7 +169,7 @@ public class FileController {
         }
 
         // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 

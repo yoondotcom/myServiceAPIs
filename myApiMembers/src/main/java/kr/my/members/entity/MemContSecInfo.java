@@ -138,9 +138,7 @@ public class MemContSecInfo {
         if (contStatus != null ? !contStatus.equals(that.contStatus) : that.contStatus != null) return false;
         if (contStatusDate != null ? !contStatusDate.equals(that.contStatusDate) : that.contStatusDate != null)
             return false;
-        if (memCode != null ? !memCode.equals(that.memCode) : that.memCode != null) return false;
-
-        return true;
+        return memCode != null ? memCode.equals(that.memCode) : that.memCode == null;
     }
 
     @Override

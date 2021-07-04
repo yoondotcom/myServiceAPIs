@@ -19,7 +19,8 @@ import java.util.List;
 @Entity
 public class FilePermissionGroup extends BaseTimeEntity {
     @Id
-    @GeneratedValue @Column(name = "PERMISSION_GROOUP_SEQ", nullable = false, insertable = true, updatable = true)
+    @GeneratedValue
+    @Column(name = "PERMISSION_GROOUP_SEQ", nullable = false, insertable = true, updatable = true)
     private Long permissionGroupId;
 
     @Column(name = "ACCESS_CODE")

@@ -79,9 +79,7 @@ public class EmpRoles {
         if (roleCode != null ? !roleCode.equals(empRoles.roleCode) : empRoles.roleCode != null) return false;
         if (emplCode != null ? !emplCode.equals(empRoles.emplCode) : empRoles.emplCode != null) return false;
         if (deptCode != null ? !deptCode.equals(empRoles.deptCode) : empRoles.deptCode != null) return false;
-        if (erRegDate != null ? !erRegDate.equals(empRoles.erRegDate) : empRoles.erRegDate != null) return false;
-
-        return true;
+        return erRegDate != null ? erRegDate.equals(empRoles.erRegDate) : empRoles.erRegDate == null;
     }
 
     @Override

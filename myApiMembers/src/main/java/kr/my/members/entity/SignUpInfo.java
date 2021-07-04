@@ -68,9 +68,7 @@ public class SignUpInfo {
         if (singUpSeq != null ? !singUpSeq.equals(that.singUpSeq) : that.singUpSeq != null) return false;
         if (branchCode != null ? !branchCode.equals(that.branchCode) : that.branchCode != null) return false;
         if (memCode != null ? !memCode.equals(that.memCode) : that.memCode != null) return false;
-        if (memRegDate != null ? !memRegDate.equals(that.memRegDate) : that.memRegDate != null) return false;
-
-        return true;
+        return memRegDate != null ? memRegDate.equals(that.memRegDate) : that.memRegDate == null;
     }
 
     @Override

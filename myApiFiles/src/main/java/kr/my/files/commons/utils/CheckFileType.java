@@ -22,7 +22,7 @@ public class CheckFileType {
                 "application/ms-pptx"  // .xlsx, .pptx, .docx
         };
 
-        for (int i=0; i<allowedMIMETypesEquals.length; i++) {
+        for (int i = 0; i < allowedMIMETypesEquals.length; i++) {
             if (mimeType.equals(allowedMIMETypesEquals[i])) {
                 return allowedMIMETypesResult[i];
             }
@@ -37,7 +37,7 @@ public class CheckFileType {
                 "application/vnd.openxmlformats-officedocument",    // .docx, .dotx, .xlsx, .xltx, .pptx, .potx, .ppsx
                 "applicaion/vnd.hancom"     // .hwp 관련
         };
-        for (int i=0; i<allowedMIMETypesStartsWith.length; i++) {
+        for (int i = 0; i < allowedMIMETypesStartsWith.length; i++) {
             if (mimeType.startsWith(allowedMIMETypesStartsWith[i])) {
                 return allowedMIMETypesEquals[i];
             }

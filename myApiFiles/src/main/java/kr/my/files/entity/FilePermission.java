@@ -19,9 +19,10 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Table(name = "FILE_PERMISSION")
-public class FilePermission extends BaseTimeEntity{
+public class FilePermission extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "FILE_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
     private Long fileRoleSeq;
     @Column(name = "OWNER_PERMISSION", nullable = false, insertable = true, updatable = true, length = 1)

@@ -153,10 +153,7 @@ public class MemComm {
         if (memAddrDtail != null ? !memAddrDtail.equals(memComm.memAddrDtail) : memComm.memAddrDtail != null)
             return false;
         if (memStatus != null ? !memStatus.equals(memComm.memStatus) : memComm.memStatus != null) return false;
-        if (memStatusDate != null ? !memStatusDate.equals(memComm.memStatusDate) : memComm.memStatusDate != null)
-            return false;
-
-        return true;
+        return memStatusDate != null ? memStatusDate.equals(memComm.memStatusDate) : memComm.memStatusDate == null;
     }
 
     @Override

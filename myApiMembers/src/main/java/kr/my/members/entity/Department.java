@@ -118,9 +118,7 @@ public class Department {
         if (deptStatus != null ? !deptStatus.equals(that.deptStatus) : that.deptStatus != null) return false;
         if (deptStatusDate != null ? !deptStatusDate.equals(that.deptStatusDate) : that.deptStatusDate != null)
             return false;
-        if (branchCode != null ? !branchCode.equals(that.branchCode) : that.branchCode != null) return false;
-
-        return true;
+        return branchCode != null ? branchCode.equals(that.branchCode) : that.branchCode == null;
     }
 
     @Override

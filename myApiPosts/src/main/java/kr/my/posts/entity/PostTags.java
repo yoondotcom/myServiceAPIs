@@ -79,10 +79,7 @@ public class PostTags {
         if (regDate != null ? !regDate.equals(postTags.regDate) : postTags.regDate != null) return false;
         if (myPostsPostSeq != null ? !myPostsPostSeq.equals(postTags.myPostsPostSeq) : postTags.myPostsPostSeq != null)
             return false;
-        if (myUsersUserCode != null ? !myUsersUserCode.equals(postTags.myUsersUserCode) : postTags.myUsersUserCode != null)
-            return false;
-
-        return true;
+        return myUsersUserCode != null ? myUsersUserCode.equals(postTags.myUsersUserCode) : postTags.myUsersUserCode == null;
     }
 
     @Override

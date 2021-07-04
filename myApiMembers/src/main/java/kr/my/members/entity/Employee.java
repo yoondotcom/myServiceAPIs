@@ -192,9 +192,7 @@ public class Employee {
         if (emplStatusDate != null ? !emplStatusDate.equals(employee.emplStatusDate) : employee.emplStatusDate != null)
             return false;
         if (branchCode != null ? !branchCode.equals(employee.branchCode) : employee.branchCode != null) return false;
-        if (deptCode != null ? !deptCode.equals(employee.deptCode) : employee.deptCode != null) return false;
-
-        return true;
+        return deptCode != null ? deptCode.equals(employee.deptCode) : employee.deptCode == null;
     }
 
     @Override

@@ -67,10 +67,7 @@ public class EmpAgreeys {
         if (agreeRegDate != null ? !agreeRegDate.equals(that.agreeRegDate) : that.agreeRegDate != null) return false;
         if (empRolesErSeq != null ? !empRolesErSeq.equals(that.empRolesErSeq) : that.empRolesErSeq != null)
             return false;
-        if (stipulationStipCode != null ? !stipulationStipCode.equals(that.stipulationStipCode) : that.stipulationStipCode != null)
-            return false;
-
-        return true;
+        return stipulationStipCode != null ? stipulationStipCode.equals(that.stipulationStipCode) : that.stipulationStipCode == null;
     }
 
     @Override

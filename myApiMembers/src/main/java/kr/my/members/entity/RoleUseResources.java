@@ -66,9 +66,7 @@ public class RoleUseResources {
         if (rurSeq != null ? !rurSeq.equals(that.rurSeq) : that.rurSeq != null) return false;
         if (roleCode != null ? !roleCode.equals(that.roleCode) : that.roleCode != null) return false;
         if (secrCode != null ? !secrCode.equals(that.secrCode) : that.secrCode != null) return false;
-        if (rsMapRegDate != null ? !rsMapRegDate.equals(that.rsMapRegDate) : that.rsMapRegDate != null) return false;
-
-        return true;
+        return rsMapRegDate != null ? rsMapRegDate.equals(that.rsMapRegDate) : that.rsMapRegDate == null;
     }
 
     @Override

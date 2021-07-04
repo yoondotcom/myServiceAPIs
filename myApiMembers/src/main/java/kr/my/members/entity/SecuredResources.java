@@ -103,10 +103,7 @@ public class SecuredResources {
             return false;
         if (secrType != null ? !secrType.equals(that.secrType) : that.secrType != null) return false;
         if (secrStatus != null ? !secrStatus.equals(that.secrStatus) : that.secrStatus != null) return false;
-        if (secrStatusDate != null ? !secrStatusDate.equals(that.secrStatusDate) : that.secrStatusDate != null)
-            return false;
-
-        return true;
+        return secrStatusDate != null ? secrStatusDate.equals(that.secrStatusDate) : that.secrStatusDate == null;
     }
 
     @Override

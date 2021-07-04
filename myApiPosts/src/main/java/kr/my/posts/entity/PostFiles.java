@@ -53,10 +53,7 @@ public class PostFiles {
         if (fileSeq != null ? !fileSeq.equals(postFiles.fileSeq) : postFiles.fileSeq != null) return false;
         if (myPostsPostSeq != null ? !myPostsPostSeq.equals(postFiles.myPostsPostSeq) : postFiles.myPostsPostSeq != null)
             return false;
-        if (fileHashCode != null ? !fileHashCode.equals(postFiles.fileHashCode) : postFiles.fileHashCode != null)
-            return false;
-
-        return true;
+        return fileHashCode != null ? fileHashCode.equals(postFiles.fileHashCode) : postFiles.fileHashCode == null;
     }
 
     @Override

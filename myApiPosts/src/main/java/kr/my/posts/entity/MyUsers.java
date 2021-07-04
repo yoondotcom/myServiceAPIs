@@ -118,9 +118,7 @@ public class MyUsers {
         if (userActivationKey != null ? !userActivationKey.equals(myUsers.userActivationKey) : myUsers.userActivationKey != null)
             return false;
         if (userRegDate != null ? !userRegDate.equals(myUsers.userRegDate) : myUsers.userRegDate != null) return false;
-        if (userUptDate != null ? !userUptDate.equals(myUsers.userUptDate) : myUsers.userUptDate != null) return false;
-
-        return true;
+        return userUptDate != null ? userUptDate.equals(myUsers.userUptDate) : myUsers.userUptDate == null;
     }
 
     @Override
@@ -135,7 +133,6 @@ public class MyUsers {
         result = 31 * result + (userUptDate != null ? userUptDate.hashCode() : 0);
         return result;
     }
-
 
 
     @OneToMany(mappedBy = "myUsersByMyUsersUserCode")

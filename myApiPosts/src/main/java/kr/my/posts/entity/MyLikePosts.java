@@ -68,9 +68,7 @@ public class MyLikePosts {
             return false;
         if (myPostsPostSeq != null ? !myPostsPostSeq.equals(that.myPostsPostSeq) : that.myPostsPostSeq != null)
             return false;
-        if (regDate != null ? !regDate.equals(that.regDate) : that.regDate != null) return false;
-
-        return true;
+        return regDate != null ? regDate.equals(that.regDate) : that.regDate == null;
     }
 
     @Override

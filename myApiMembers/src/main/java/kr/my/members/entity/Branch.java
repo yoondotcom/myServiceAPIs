@@ -219,10 +219,7 @@ public class Branch {
         if (branchLevel != null ? !branchLevel.equals(branch.branchLevel) : branch.branchLevel != null) return false;
         if (branchStatus != null ? !branchStatus.equals(branch.branchStatus) : branch.branchStatus != null)
             return false;
-        if (branchStatusDate != null ? !branchStatusDate.equals(branch.branchStatusDate) : branch.branchStatusDate != null)
-            return false;
-
-        return true;
+        return branchStatusDate != null ? branchStatusDate.equals(branch.branchStatusDate) : branch.branchStatusDate == null;
     }
 
     @Override

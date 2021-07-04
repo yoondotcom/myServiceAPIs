@@ -105,9 +105,7 @@ public class Stipulation {
         if (stipStatus != null ? !stipStatus.equals(that.stipStatus) : that.stipStatus != null) return false;
         if (stipStatusDate != null ? !stipStatusDate.equals(that.stipStatusDate) : that.stipStatusDate != null)
             return false;
-        if (stipGroup != null ? !stipGroup.equals(that.stipGroup) : that.stipGroup != null) return false;
-
-        return true;
+        return stipGroup != null ? stipGroup.equals(that.stipGroup) : that.stipGroup == null;
     }
 
     @Override
