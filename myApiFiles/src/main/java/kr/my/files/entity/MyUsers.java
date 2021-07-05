@@ -10,6 +10,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by goodjwon on 16. 1. 16..
@@ -37,4 +38,9 @@ public class MyUsers extends BaseTimeEntity {
     @Column(name = "UPT_DATE", nullable = true, insertable = true, updatable = true)
     private Timestamp uptDate;
 
+    /**
+     * 사용자를 조회 하면 파일들(목록)이 나오게 한다.
+     */
+    @OneToMany(mappedBy = "myUsersByUserCode")
+    private List<MyFiles> myFilesList;
 }

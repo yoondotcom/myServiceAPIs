@@ -48,10 +48,12 @@ public class FileControllerTest {
     @Test
     @DisplayName("file, permission.json submit 테스트")
     void uploadShouldReturnMetadataNameWithJsonFile() throws Exception {
-        //Given
+        //Given 파일생성
         MockMultipartFile file = new MockMultipartFile("file", "hello.txt",
                 TEXT_PLAIN_VALUE, "Hello, World!".getBytes(StandardCharsets.UTF_8));
 
+
+        //Given Json 파일 생성
         MockMultipartFile metadata = new MockMultipartFile(
                 "medadata",
                 "metadata",
@@ -60,6 +62,8 @@ public class FileControllerTest {
                         .writeValueAsString(new FileMetadata("hello world", 6, 6, 6))
                         .getBytes(StandardCharsets.UTF_8));
 
+
+        //then
         mockMvc.perform(multipart("/upload-file-permission-json-file")
                 .file(file).file(metadata))
                 .andDo(print())
@@ -73,7 +77,7 @@ public class FileControllerTest {
         //Given
         MockMultipartFile file = new MockMultipartFile("file", "hello2.txt",
                 TEXT_PLAIN_VALUE, "Hello, World! JSON Meta".getBytes(StandardCharsets.UTF_8));
-
+        //Json 요청 생성
         FileMetadata metadata = new FileMetadata("hello world", 6, 6, 6);
 
         mockMvc.perform(multipart("/upload-file-permission-json")
@@ -138,6 +142,7 @@ public class FileControllerTest {
         //given
         //when
         //then
+
     }
 
     @Test

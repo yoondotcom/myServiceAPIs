@@ -53,6 +53,10 @@ public class MyFiles extends BaseTimeEntity {
     @JoinColumn(name = "FILE_ROLE_SEQ")
     private FilePermission filePermissions;
 
+
+    /**
+     * 파일을 조회 하면 해당 사용자를 나오게 한다.
+     */
     @ManyToOne
     @JoinColumn(name = "USER_CODE", referencedColumnName = "USER_CODE", nullable = false)
     private MyUsers myUsersByUserCode;
