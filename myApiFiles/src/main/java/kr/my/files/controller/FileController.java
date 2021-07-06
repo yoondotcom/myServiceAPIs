@@ -6,7 +6,6 @@ import kr.my.files.dto.UploadFileResponse;
 import kr.my.files.service.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static kr.my.files.enums.UserFilePermissions.*;
 
 @RestController
 public class FileController {
@@ -85,7 +86,12 @@ public class FileController {
 
         //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
         if (metadata == null) {
-            metadata = new FileMetadata(file.getName(), 6, 0, 0);
+            metadata = FileMetadata.builder()
+                    .fileName(file.getOriginalFilename())
+                    .ownerRead(OWNER_READ.getPermission()).ownerWrite(OWNER_WRITE.getPermission())
+                    .groupRead(GROUP_READ.getPermission()).groupWrite("")
+                    .publicRead("").publicWrite("")
+                    .build();
         }
 
         String fileName = fileStorageService.storeFile(file);
@@ -95,7 +101,7 @@ public class FileController {
                 .path(fileName)
                 .toUriString();
 
-        metadata.setName(fileName);
+        metadata.setFileName(fileName);
         metadata.setLength(file.getSize());
         metadata.setContentType(file.getContentType());
         metadata.setDownloadPath(fileDownloadUri);
@@ -120,7 +126,12 @@ public class FileController {
 
         //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
         if (metadata == null) {
-            metadata = new FileMetadata(file.getName(), 6, 0, 0);
+            metadata = FileMetadata.builder()
+                    .fileName(file.getOriginalFilename())
+                    .ownerRead(OWNER_READ.getPermission()).ownerWrite(OWNER_WRITE.getPermission())
+                    .groupRead(GROUP_READ.getPermission()).groupWrite("")
+                    .publicRead("").publicWrite("")
+                    .build();
         }
 
         String fileName = fileStorageService.storeFile(file);
@@ -130,7 +141,7 @@ public class FileController {
                 .path(fileName)
                 .toUriString();
 
-        metadata.setName(fileName);
+        metadata.setFileName(fileName);
         metadata.setLength(file.getSize());
         metadata.setContentType(file.getContentType());
         metadata.setDownloadPath(fileDownloadUri);

@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
 
+import static kr.my.files.enums.UserFilePermissions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -59,7 +60,12 @@ public class FileControllerTest {
                 "metadata",
                 APPLICATION_JSON_VALUE,
                 new ObjectMapper()
-                        .writeValueAsString(new FileMetadata("hello world", 6, 6, 6))
+                        .writeValueAsString(FileMetadata.builder()
+                                .fileName(file.getOriginalFilename())
+                                .ownerRead(OWNER_READ.getPermission()).ownerWrite(OWNER_WRITE.getPermission())
+                                .groupRead(GROUP_READ.getPermission()).groupWrite("")
+                                .publicRead("").publicWrite("")
+                                .build())
                         .getBytes(StandardCharsets.UTF_8));
 
 
@@ -78,7 +84,12 @@ public class FileControllerTest {
         MockMultipartFile file = new MockMultipartFile("file", "hello2.txt",
                 TEXT_PLAIN_VALUE, "Hello, World! JSON Meta".getBytes(StandardCharsets.UTF_8));
         //Json 요청 생성
-        FileMetadata metadata = new FileMetadata("hello world", 6, 6, 6);
+        FileMetadata metadata = FileMetadata.builder()
+                .fileName(file.getOriginalFilename())
+                .ownerRead(OWNER_READ.getPermission()).ownerWrite(OWNER_WRITE.getPermission())
+                .groupRead(GROUP_READ.getPermission()).groupWrite("")
+                .publicRead("").publicWrite("")
+                .build();
 
         mockMvc.perform(multipart("/upload-file-permission-json")
                 .file(file)

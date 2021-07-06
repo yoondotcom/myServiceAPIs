@@ -25,20 +25,27 @@ public class FilePermission extends BaseTimeEntity {
     @GeneratedValue
     @Column(name = "FILE_ROLE_SEQ", nullable = false, insertable = true, updatable = true)
     private Long fileRoleSeq;
-    @Column(name = "OWNER_PERMISSION", nullable = false, insertable = true, updatable = true, length = 1)
-    private Integer ownerPermission;
-    @Column(name = "GROOUP_PERMISSION", nullable = false, insertable = true, updatable = true, length = 1)
-    private Integer groupPermission;
-    @Column(name = "PUBLIC_PERMISSION", nullable = false, insertable = true, updatable = true, length = 1)
-    private Integer publicPermission;
-    @Column(name = "REG_DATE", nullable = false, insertable = true, updatable = true)
-    private LocalDateTime regDate;
-    @Column(name = "UPT_DATE", nullable = true, insertable = true, updatable = true)
-    private LocalDateTime uptDate;
+    @Column(name = "OWNER_READ", nullable = false, insertable = true, updatable = true, length = 20)
+    private String ownerRead;
+    @Column(name = "OWNER_WRITE", nullable = false, insertable = true, updatable = true, length = 20)
+    private String ownerWrite;
+    @Column(name = "GROUP_READ", nullable = false, insertable = true, updatable = true, length = 20)
+    private String groupRead;
+    @Column(name = "GROUP_WRITE", nullable = false, insertable = true, updatable = true, length = 20)
+    private String groupWrite;
+    @Column(name = "PUBLIC_READ", nullable = false, insertable = true, updatable = true, length = 20)
+    private String publicRead;
+    @Column(name = "PUBLIC_WRITE", nullable = false, insertable = true, updatable = true, length = 20)
+    private String publicWrite;
 
-    public FilePermission(Integer ownerPermission, Integer groupPermission, Integer publicPermission) {
-        this.ownerPermission = ownerPermission;
-        this.groupPermission = groupPermission;
-        this.publicPermission = publicPermission;
+    public FilePermission(String ownerRead, String ownerWrite,
+                          String groupRead, String groupWrite,
+                          String publicRead, String publicWrite) {
+        this.ownerRead = ownerRead;
+        this.ownerWrite = ownerWrite;
+        this.groupRead = groupRead;
+        this.groupWrite = groupWrite;
+        this.publicRead = publicRead;
+        this.publicWrite = publicWrite;
     }
 }
