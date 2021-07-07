@@ -51,7 +51,7 @@ public class FileControllerTest {
     }
 
     @Test
-    @DisplayName("file, permission.json submit 테스트")
+    @DisplayName("file, permission.json 파일 submit 테스트")
     void uploadShouldReturnMetadataNameWithJsonFile() throws Exception {
         //Given 파일생성
         MockMultipartFile file = new MockMultipartFile("file", "hello.txt",
