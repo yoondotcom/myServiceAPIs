@@ -1,6 +1,7 @@
 package kr.my.files.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import kr.my.files.entity.MyFiles;
 import kr.my.files.enums.UserFilePermissions;
 import lombok.*;
 
@@ -15,10 +16,9 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 @ToString
 @JsonAutoDetect(fieldVisibility = ANY)
 public class FileMetadata {
-    private String fileName;
     private String contentType;
     private long length;
-    private String downloadPath;
     private String originFileName;
     private Set<String> userFilePermissions;
+
 }

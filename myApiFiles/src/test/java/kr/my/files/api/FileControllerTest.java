@@ -1,10 +1,8 @@
-package kr.my.files.controller;
+package kr.my.files.api;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.my.files.dto.FileMetadata;
-import kr.my.files.enums.UserFilePermissions;
-import kr.my.files.service.FileStorageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

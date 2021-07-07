@@ -38,6 +38,8 @@ public class MyFiles extends BaseTimeEntity {
     private String fileOwnerDisplayName;
     @Column(name = "FILE_PATH", nullable = false, insertable = true, updatable = true, length = 1000)
     private String filePath;
+    @Column(name = "FILE_Size", nullable = false, insertable = true, updatable = true, length = 1000)
+    private Long fileSize;
     @Column(name = "FILE_STATUS", nullable = false, insertable = true, updatable = true, length = 3)
     private String fileStatus;
     @Column(name = "REG_DATE", nullable = false, insertable = true, updatable = true)

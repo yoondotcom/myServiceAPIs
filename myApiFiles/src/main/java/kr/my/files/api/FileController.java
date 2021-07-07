@@ -1,4 +1,4 @@
-package kr.my.files.controller;
+package kr.my.files.api;
 
 import kr.my.files.dto.FileMetadata;
 import kr.my.files.dto.UploadFileInfo;
