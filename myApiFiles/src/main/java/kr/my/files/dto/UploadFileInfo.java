@@ -1,19 +1,20 @@
 package kr.my.files.dto;
 
 
+import kr.my.files.enums.UserFilePermissions;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @ToString
+@Deprecated
 public class UploadFileInfo {
     private String fileName;
-    private int ownerPermission;  //rw = 6, r = 4, w = 2
-    private int groupPermission;  //rw = 6, r = 4, w = 2
-    private int publicPermission; //rw = 6, r = 4, w = 2
     private MultipartFile file;
-
+    private Set<String> UserFilePermissions;
 }

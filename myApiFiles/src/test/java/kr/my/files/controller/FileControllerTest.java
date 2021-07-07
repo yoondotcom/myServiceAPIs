@@ -3,6 +3,7 @@ package kr.my.files.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.my.files.dto.FileMetadata;
+import kr.my.files.enums.UserFilePermissions;
 import kr.my.files.service.FileStorageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Set;
 
 import static kr.my.files.enums.UserFilePermissions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -40,7 +43,8 @@ public class FileControllerTest {
         this.mockMvc.perform(multipart("/upload-file-permission")
                 .file(file)
                 .param("fileName", "aaa.txt")
-                .param("ownerPermission", "6"))
+                .param("filePermissions.ownerRead", OWNER_READ.getPermission())
+                .param("filePermissions.ownerWrite", OWNER_WRITE.getPermission()))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
         ;
@@ -53,21 +57,22 @@ public class FileControllerTest {
         MockMultipartFile file = new MockMultipartFile("file", "hello.txt",
                 TEXT_PLAIN_VALUE, "Hello, World!".getBytes(StandardCharsets.UTF_8));
 
-
         //Given Json 파일 생성
+        //Json 요청 생성
+        Set<String> filePermissions = new HashSet();
+        filePermissions.add(OWNER_WRITE.getPermission());
+        filePermissions.add(OWNER_READ.getPermission());
+
         MockMultipartFile metadata = new MockMultipartFile(
-                "medadata",
+                "metadata",
                 "metadata",
                 APPLICATION_JSON_VALUE,
                 new ObjectMapper()
                         .writeValueAsString(FileMetadata.builder()
                                 .fileName(file.getOriginalFilename())
-                                .ownerRead(OWNER_READ.getPermission()).ownerWrite(OWNER_WRITE.getPermission())
-                                .groupRead(GROUP_READ.getPermission()).groupWrite("")
-                                .publicRead("").publicWrite("")
+                                .userFilePermissions(filePermissions)
                                 .build())
                         .getBytes(StandardCharsets.UTF_8));
-
 
         //then
         mockMvc.perform(multipart("/upload-file-permission-json-file")
@@ -84,11 +89,14 @@ public class FileControllerTest {
         MockMultipartFile file = new MockMultipartFile("file", "hello2.txt",
                 TEXT_PLAIN_VALUE, "Hello, World! JSON Meta".getBytes(StandardCharsets.UTF_8));
         //Json 요청 생성
+        Set<String> filePermissions = new HashSet();
+
+        filePermissions.add(OWNER_WRITE.getPermission());
+        filePermissions.add(OWNER_READ.getPermission());
+
         FileMetadata metadata = FileMetadata.builder()
+                .userFilePermissions(filePermissions)
                 .fileName(file.getOriginalFilename())
-                .ownerRead(OWNER_READ.getPermission()).ownerWrite(OWNER_WRITE.getPermission())
-                .groupRead(GROUP_READ.getPermission()).groupWrite("")
-                .publicRead("").publicWrite("")
                 .build();
 
         mockMvc.perform(multipart("/upload-file-permission-json")
@@ -110,6 +118,23 @@ public class FileControllerTest {
     @Test
     @DisplayName("파일 저장시 일자에 맞는 디렉터리 구조로 저장 되는지 확인")
     void checkFileSavePath() throws Exception {
+        //given
+        //when
+        //then
+    }
+
+    @Test
+    @DisplayName("파일 사용자 정보를 DB에 입력 한다.")
+    void saveFileUserinfo() throws Exception {
+        //given
+        //when
+        //then
+    }
+
+
+    @Test
+    @DisplayName("파일 메타정보 DB 입력")
+    void saveFileMetainfo() throws Exception {
         //given
         //when
         //then
@@ -139,13 +164,7 @@ public class FileControllerTest {
         //then
     }
 
-    @Test
-    @DisplayName("파일 메타정보 DB 입력")
-    void saveFileMetainfo() throws Exception {
-        //given
-        //when
-        //then
-    }
+
 
     @Test
     @DisplayName("파일 다운로드 기록 저장")
@@ -157,12 +176,29 @@ public class FileControllerTest {
     }
 
     @Test
-    @DisplayName("파일 권한에 열람 가능자 정보를 ... ")
+    @DisplayName("파일 권한에 열람 가능자 정보를 저장한다. ")
     void testPermission() {
         //given
         //when
         //then
     }
+
+    @Test
+    @DisplayName("파일 권한에 열람 가능자 정보가 있으면 맞는지 확인 하고 다운로드 시킨다. ")
+    void groupPermissionHashKeyCorrectCaseCheck() {
+        //given
+        //when
+        //then
+    }
+
+    @Test
+    @DisplayName("파일 권한에 열람 가능자 정보를 확인 하고 틀릴경우 401 권한 없음 에러를 던진다. ")
+    void groupPermissionHashKeyBadCaseCheck() {
+        //given
+        //when
+        //then
+    }
+
 
 
 }

@@ -18,7 +18,9 @@ import org.springframework.core.io.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static kr.my.files.enums.UserFilePermissions.*;
@@ -35,41 +37,54 @@ public class FileController {
     }
 
     @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+    public UploadFileResponse uploadFile(
+            @ModelAttribute UploadFileInfo uploadFileInfo, ModelMap modelMap
+    ) {
+        String fileName = fileStorageService.storeFile(uploadFileInfo.getFile());
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)
                 .toUriString();
 
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
+        return UploadFileResponse.builder()
+                .fileName(fileName)
+                .fileType(uploadFileInfo.getFile().getContentType())
+                .fileDownloadUri(fileDownloadUri)
+                .userFilePermissions(uploadFileInfo.getUserFilePermissions())
+                .size(uploadFileInfo.getFile().getSize())
+                .build();
     }
 
 
     /**
-     * Form and Permission 정보 저장.
+     * Form 으로 파일 퍼미미션 Permission 정보 전송.
      *
      * @param
      * @param
      * @return
      */
+    @Deprecated
     @PostMapping(value = "/upload-file-permission")
     public UploadFileResponse uploadFileAndPerMissionJustForm(
-            @ModelAttribute UploadFileInfo fileInfo, ModelMap modelMap) {
+            @ModelAttribute UploadFileInfo uploadFileInfo, ModelMap modelMap) {
 
-        modelMap.addAttribute("fileInfo", fileInfo);
+        modelMap.addAttribute("fileInfo", uploadFileInfo);
 
-        String fileName = fileStorageService.storeFile(fileInfo.getFile());
+        String fileName = fileStorageService.storeFile(uploadFileInfo.getFile());
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)
                 .toUriString();
 
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                fileInfo.getFile().getContentType(), fileInfo.getFile().getSize());
+        return UploadFileResponse.builder()
+                .fileName(fileName)
+                .fileType(uploadFileInfo.getFile().getContentType())
+                .fileDownloadUri(fileDownloadUri)
+                .userFilePermissions(uploadFileInfo.getUserFilePermissions())
+                .size(uploadFileInfo.getFile().getSize())
+                .build();
     }
 
     /**
@@ -88,9 +103,7 @@ public class FileController {
         if (metadata == null) {
             metadata = FileMetadata.builder()
                     .fileName(file.getOriginalFilename())
-                    .ownerRead(OWNER_READ.getPermission()).ownerWrite(OWNER_WRITE.getPermission())
-                    .groupRead(GROUP_READ.getPermission()).groupWrite("")
-                    .publicRead("").publicWrite("")
+                    .userFilePermissions(metadata.getUserFilePermissions())
                     .build();
         }
 
@@ -110,10 +123,10 @@ public class FileController {
     }
 
     /**
-     * Form 과 Json으로 요청
+     * Form 과 Json 으로 요청
      *
      * @param file
-     * @param metadata
+     * @param metaData
      * @return
      */
     @PostMapping(value = "/upload-file-permission-json",
@@ -122,15 +135,18 @@ public class FileController {
                     MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<FileMetadata> uploadFileAndPerMissionWithJson(
             @RequestPart(value = "file") MultipartFile file,
-            @RequestPart(value = "metadata", required = false) FileMetadata metadata) {
+            @RequestPart(value = "metadata", required = false) FileMetadata metaData) {
 
         //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
-        if (metadata == null) {
-            metadata = FileMetadata.builder()
+        if (metaData == null) {
+            Set<String> filePermissions = new HashSet();
+
+            filePermissions.add(OWNER_WRITE.getPermission());
+            filePermissions.add(OWNER_READ.getPermission());
+
+            metaData = FileMetadata.builder()
                     .fileName(file.getOriginalFilename())
-                    .ownerRead(OWNER_READ.getPermission()).ownerWrite(OWNER_WRITE.getPermission())
-                    .groupRead(GROUP_READ.getPermission()).groupWrite("")
-                    .publicRead("").publicWrite("")
+                    .userFilePermissions(filePermissions)
                     .build();
         }
 
@@ -141,13 +157,13 @@ public class FileController {
                 .path(fileName)
                 .toUriString();
 
-        metadata.setFileName(fileName);
-        metadata.setLength(file.getSize());
-        metadata.setContentType(file.getContentType());
-        metadata.setDownloadPath(fileDownloadUri);
-        metadata.setOriginFileName(file.getOriginalFilename());
+        metaData.setFileName(fileName);
+        metaData.setLength(file.getSize());
+        metaData.setContentType(file.getContentType());
+        metaData.setDownloadPath(fileDownloadUri);
+        metaData.setOriginFileName(file.getOriginalFilename());
 
-        return ResponseEntity.ok(metadata);
+        return ResponseEntity.ok(metaData);
     }
 
 
@@ -158,11 +174,16 @@ public class FileController {
      * @return
      */
     @PostMapping("/upload-files-permission")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
+    public List<FileMetadata> uploadMultipleFiles(
+            @RequestParam("files") MultipartFile[] files,
+            @RequestPart(value = "metadata", required = false) FileMetadata metaData) {
+
+         Arrays.asList(files)
                 .stream()
-                .map(file -> uploadFile(file))
+                .map(file -> fileStorageService.storeFile(file))
                 .collect(Collectors.toList());
+
+         return null;
     }
 
 
