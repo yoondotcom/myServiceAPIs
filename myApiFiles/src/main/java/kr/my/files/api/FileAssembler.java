@@ -1,6 +1,7 @@
 package kr.my.files.api;
 
 import kr.my.files.dto.FileMetadata;
+import kr.my.files.dto.UploadFileMetadataResponse;
 import kr.my.files.entity.MyFiles;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -14,39 +15,22 @@ import java.util.stream.StreamSupport;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @Component
-public class FileAssembler extends RepresentationModelAssemblerSupport<MyFiles, FileMetadata> {
+public class FileAssembler extends RepresentationModelAssemblerSupport<MyFiles, UploadFileMetadataResponse> {
     public FileAssembler() {
-        super(FileController.class, FileMetadata.class);
+        super(FileController.class, UploadFileMetadataResponse.class);
     }
 
     @Override
-    public FileMetadata toModel(MyFiles entity) {
+    public UploadFileMetadataResponse toModel(MyFiles entity) {
 
-        FileMetadata fileMetadata = FileMetadata.builder().official(entity).build();
-        WebMvcLinkBuilder selfLinkBuilder = linkTo(UserController.class);
+        UploadFileMetadataResponse fileMetadata
+                = UploadFileMetadataResponse.builder().build();
+        fileMetadata.setFileMetadata(entity);
 
-        fileMetadata.add(selfLinkBuilder.withRel("query-users"));
-        fileMetadata.add(selfLinkBuilder.slash(entity.getUserId()).withSelfRel());
-        fileMetadata.add(selfLinkBuilder.slash(entity.getUserId()).withRel("update-user"));
-        fileMetadata.add(Link.of("/docs/index.html").withRel("profile"));
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(FileController.class);
+        fileMetadata.add(selfLinkBuilder.withRel("query-file"));
+        fileMetadata.add(selfLinkBuilder.slash(entity.getFileDownloadPath()).withSelfRel());
 
-        return officialResModel;
-    }
-
-    @Override
-    public CollectionModel<FileMetadata> toCollectionModel(Iterable<? extends Official> entries){
-        CollectionModel<FileMetadata> officialResModels = super.toCollectionModel(entries);
-        //todo  .withSelfRel()) 전에 먼가 들어가야 할 수도 있다.
-        //        officialResModels.add(linkTo(methodOn(UserController.class)).withSelfRel());
-
-        return StreamSupport
-                .stream(entries.spliterator(), false)
-                .map(this::toModel)
-                .collect(Collectors.collectingAndThen(Collectors.toList(), CollectionModel::of));
-
-
-        //        officialResModels.add(Link.of("/docs/index.html").withRel("profile"));
-
-        //        return officialResModels;
+        return fileMetadata;
     }
 }

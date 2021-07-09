@@ -14,11 +14,11 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 @AllArgsConstructor
 @Data
 @ToString
+@Deprecated
 @JsonAutoDetect(fieldVisibility = ANY)
 public class FileMetadata {
     private String contentType;
     private long length;
     private String originFileName;
-    private Set<String> userFilePermissions;
-
+    private String md5HashName;
 }

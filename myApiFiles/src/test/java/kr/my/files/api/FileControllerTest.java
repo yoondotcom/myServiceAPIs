@@ -3,6 +3,8 @@ package kr.my.files.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.my.files.dto.FileMetadata;
+import kr.my.files.dto.UploadFileRequest;
+import kr.my.files.enums.UserFilePermissions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,9 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static kr.my.files.enums.UserFilePermissions.*;
@@ -44,8 +48,7 @@ public class FileControllerTest {
                 .param("filePermissions.ownerRead", OWNER_READ.getPermission())
                 .param("filePermissions.ownerWrite", OWNER_WRITE.getPermission()))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful())
-        ;
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
@@ -57,16 +60,16 @@ public class FileControllerTest {
 
         //Given Json 파일 생성
         //Json 요청 생성
-        Set<String> filePermissions = new HashSet();
-        filePermissions.add(OWNER_WRITE.getPermission());
-        filePermissions.add(OWNER_READ.getPermission());
+        List<UserFilePermissions> filePermissions = new ArrayList<>();
+        filePermissions.add(OWNER_WRITE);
+        filePermissions.add(OWNER_READ);
 
         MockMultipartFile metadata = new MockMultipartFile(
                 "metadata",
                 "metadata",
                 APPLICATION_JSON_VALUE,
                 new ObjectMapper()
-                        .writeValueAsString(FileMetadata.builder()
+                        .writeValueAsString(UploadFileRequest.builder()
                                 .fileName(file.getOriginalFilename())
                                 .userFilePermissions(filePermissions)
                                 .build())
@@ -87,20 +90,18 @@ public class FileControllerTest {
         MockMultipartFile file = new MockMultipartFile("file", "hello2.txt",
                 TEXT_PLAIN_VALUE, "Hello, World! JSON Meta".getBytes(StandardCharsets.UTF_8));
         //Json 요청 생성
-        Set<String> filePermissions = new HashSet();
 
-        filePermissions.add(OWNER_WRITE.getPermission());
-        filePermissions.add(OWNER_READ.getPermission());
-
-        FileMetadata metadata = FileMetadata.builder()
-                .userFilePermissions(filePermissions)
-                .fileName(file.getOriginalFilename())
-                .build();
+        List<UserFilePermissions> filePermissions = new ArrayList<>();
+        filePermissions.add(OWNER_WRITE);
+        filePermissions.add(OWNER_READ);
 
         mockMvc.perform(multipart("/upload-file-permission-json")
                 .file(file)
                 .accept(APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(metadata)))
+                .content(objectMapper.writeValueAsString(UploadFileRequest.builder()
+                        .fileName(file.getOriginalFilename())
+                        .userFilePermissions(filePermissions)
+                        .build())))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
@@ -196,7 +197,5 @@ public class FileControllerTest {
         //when
         //then
     }
-
-
 
 }

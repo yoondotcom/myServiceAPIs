@@ -1,8 +1,9 @@
 package kr.my.files.api;
 
 import kr.my.files.dto.FileMetadata;
-import kr.my.files.dto.UploadFileInfo;
-import kr.my.files.dto.UploadFileResponse;
+import kr.my.files.dto.UploadFileMetadataResponse;
+import kr.my.files.dto.UploadFileRequest;
+import kr.my.files.enums.UserFilePermissions;
 import kr.my.files.service.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +18,11 @@ import org.springframework.core.io.Resource;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static kr.my.files.enums.UserFilePermissions.*;
+import static kr.my.files.enums.UserFilePermissions.OWNER_READ;
+import static kr.my.files.enums.UserFilePermissions.OWNER_WRITE;
 
 @RestController
 public class FileController {
@@ -36,23 +35,23 @@ public class FileController {
         this.fileStorageService = fileStorageService;
     }
 
-    @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(
-            @ModelAttribute UploadFileInfo uploadFileInfo, ModelMap modelMap
+    @PostMapping("/upload-file")
+    public UploadFileMetadataResponse uploadFile(
+            @ModelAttribute UploadFileRequest uploadFileRequest, ModelMap modelMap
     ) {
-        String fileName = fileStorageService.storeFile(uploadFileInfo.getFile());
+        String fileName = fileStorageService.storeFile(uploadFileRequest.getFile());
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)
                 .toUriString();
 
-        return UploadFileResponse.builder()
+        return UploadFileMetadataResponse.builder()
                 .fileName(fileName)
-                .fileType(uploadFileInfo.getFile().getContentType())
+                .fileType(uploadFileRequest.getFile().getContentType())
                 .fileDownloadUri(fileDownloadUri)
-                .userFilePermissions(uploadFileInfo.getUserFilePermissions())
-                .size(uploadFileInfo.getFile().getSize())
+                .filePermissions(uploadFileRequest.getUserFilePermissions())
+                .size(uploadFileRequest.getFile().getSize())
                 .build();
     }
 
@@ -66,24 +65,24 @@ public class FileController {
      */
     @Deprecated
     @PostMapping(value = "/upload-file-permission")
-    public UploadFileResponse uploadFileAndPerMissionJustForm(
-            @ModelAttribute UploadFileInfo uploadFileInfo, ModelMap modelMap) {
+    public UploadFileMetadataResponse uploadFileAndPerMissionJustForm(
+            @ModelAttribute UploadFileRequest uploadFileRequest, ModelMap modelMap) {
 
-        modelMap.addAttribute("fileInfo", uploadFileInfo);
+        modelMap.addAttribute("fileInfo", uploadFileRequest);
 
-        String fileName = fileStorageService.storeFile(uploadFileInfo.getFile());
+        String fileName = fileStorageService.storeFile(uploadFileRequest.getFile());
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
                 .path(fileName)
                 .toUriString();
 
-        return UploadFileResponse.builder()
+        return UploadFileMetadataResponse.builder()
                 .fileName(fileName)
-                .fileType(uploadFileInfo.getFile().getContentType())
+                .fileType(uploadFileRequest.getFile().getContentType())
                 .fileDownloadUri(fileDownloadUri)
-                .userFilePermissions(uploadFileInfo.getUserFilePermissions())
-                .size(uploadFileInfo.getFile().getSize())
+                .filePermissions(uploadFileRequest.getUserFilePermissions())
+                .size(uploadFileRequest.getFile().getSize())
                 .build();
     }
 
@@ -95,16 +94,20 @@ public class FileController {
      * @return
      */
     @PostMapping(value = "/upload-file-permission-json-file")
-    public ResponseEntity<FileMetadata> uploadFileAndPerMissionWithJsonFile(
+    public ResponseEntity<UploadFileMetadataResponse> uploadFileAndPerMissionWithJsonFile(
             @RequestPart(value = "file") MultipartFile file,
-            @RequestPart(value = "metadata", required = false) FileMetadata metadata) {
+            @RequestPart(value = "metadata", required = false) UploadFileRequest metadata) {
 
         //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
         if (metadata == null) {
-            metadata = FileMetadata.builder()
-                    .fileName(file.getOriginalFilename())
-                    .userFilePermissions(metadata.getUserFilePermissions())
-                    .build();
+            List<UserFilePermissions> filePermissions = new ArrayList<>();
+            filePermissions.add(OWNER_WRITE);
+            filePermissions.add(OWNER_READ);
+
+            metadata = UploadFileRequest.builder()
+                        .fileName(file.getOriginalFilename())
+                        .userFilePermissions(filePermissions)
+                        .build();
         }
 
         String fileName = fileStorageService.storeFile(file);
@@ -114,37 +117,38 @@ public class FileController {
                 .path(fileName)
                 .toUriString();
 
-        metadata.setFileName(fileName);
-        metadata.setLength(file.getSize());
-        metadata.setContentType(file.getContentType());
-        metadata.setDownloadPath(fileDownloadUri);
-
-        return ResponseEntity.ok(metadata);
+        return ResponseEntity.ok(UploadFileMetadataResponse.builder()
+                .fileName(fileName)
+                .fileDownloadUri("")
+                .fileType("")
+                .originFileName("")
+                .size(0)
+                .filePermissions(metadata.getUserFilePermissions())
+                .build());
     }
 
     /**
      * Form 과 Json 으로 요청
      *
      * @param file
-     * @param metaData
+     * @param metadata
      * @return
      */
     @PostMapping(value = "/upload-file-permission-json",
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<FileMetadata> uploadFileAndPerMissionWithJson(
+    public ResponseEntity<UploadFileMetadataResponse> uploadFileAndPerMissionWithJson(
             @RequestPart(value = "file") MultipartFile file,
-            @RequestPart(value = "metadata", required = false) FileMetadata metaData) {
+            @RequestPart(value = "metadata", required = false) UploadFileRequest metadata) {
 
         //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
-        if (metaData == null) {
-            Set<String> filePermissions = new HashSet();
+        if (metadata == null) {
+            List<UserFilePermissions> filePermissions = new ArrayList<>();
+            filePermissions.add(OWNER_WRITE);
+            filePermissions.add(OWNER_READ);
 
-            filePermissions.add(OWNER_WRITE.getPermission());
-            filePermissions.add(OWNER_READ.getPermission());
-
-            metaData = FileMetadata.builder()
+            metadata = UploadFileRequest.builder()
                     .fileName(file.getOriginalFilename())
                     .userFilePermissions(filePermissions)
                     .build();
@@ -157,13 +161,14 @@ public class FileController {
                 .path(fileName)
                 .toUriString();
 
-        metaData.setFileName(fileName);
-        metaData.setLength(file.getSize());
-        metaData.setContentType(file.getContentType());
-        metaData.setDownloadPath(fileDownloadUri);
-        metaData.setOriginFileName(file.getOriginalFilename());
-
-        return ResponseEntity.ok(metaData);
+        return ResponseEntity.ok(UploadFileMetadataResponse.builder()
+                .fileName(fileName)
+                .fileDownloadUri("")
+                .fileType("")
+                .originFileName("")
+                .size(0)
+                .filePermissions(metadata.getUserFilePermissions())
+                .build());
     }
 
 
