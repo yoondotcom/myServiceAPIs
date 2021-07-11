@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 import org.apache.tika.Tika;
 
@@ -57,7 +58,7 @@ public class FileStorageService {
             if (fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
-            String digestFileName = getHashFileName(file, ext);
+            String digestFileName = getUUIDFileName(file, ext);
 
             Path targetLocation = this.fileStorageLocation.resolve(digestFileName); //경로 만들기.
 
@@ -71,20 +72,27 @@ public class FileStorageService {
     }
 
     /**
-     * file hash 명을 만든가.
-     *
+     * file hash 값 찾기 만든가.
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    private String getFileHash(MultipartFile file) throws IOException {
+        String digestFileName = DigestUtils.md5Hex(file.getInputStream());
+
+        return digestFileName;
+    }
+
+    /**
+     * 파일명 저장하기.
      * @param file
      * @param ext
      * @return
      * @throws IOException
      */
-    private String getHashFileName(MultipartFile file, String ext) throws IOException {
-        String digestFileName = DigestUtils.md5Hex(file.getInputStream());
-        digestFileName = digestFileName.concat(".").concat(ext);
-
-        String mimeType = getFileMimeType(file);
-
-        return digestFileName;
+    private String getUUIDFileName(MultipartFile file, String ext) throws IOException {
+        String uuidFileName = UUID.randomUUID().toString();
+        return uuidFileName.concat(".").concat(ext);
     }
 
     /**
