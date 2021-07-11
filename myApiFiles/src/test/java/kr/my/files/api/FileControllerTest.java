@@ -38,20 +38,6 @@ public class FileControllerTest {
     ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("file, permission 정보 form submit 테스트 ")
-    void uploadFileSubmitTest() throws Exception {
-
-        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "hello file".getBytes());
-        this.mockMvc.perform(multipart("/upload-file-permission")
-                .file(file)
-                .param("fileName", "aaa.txt")
-                .param("filePermissions.ownerRead", OWNER_READ.getPermission())
-                .param("filePermissions.ownerWrite", OWNER_WRITE.getPermission()))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-    }
-
-    @Test
     @DisplayName("file, permission.json 파일 submit 테스트")
     void uploadShouldReturnMetadataNameWithJsonFile() throws Exception {
         //Given 파일생성
@@ -84,7 +70,7 @@ public class FileControllerTest {
     }
 
     @Test
-    @DisplayName("file, permission 정보 ")
+    @DisplayName("file, permission json 정보 ")
     void uploadShouldReturnMetadataNameWithJson() throws Exception {
         //Given
         MockMultipartFile file = new MockMultipartFile("file", "hello2.txt",

@@ -11,6 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @ToString
+@Setter
+@Getter
 public class UploadFileRequest {
     private String fileName;
     private MultipartFile file;

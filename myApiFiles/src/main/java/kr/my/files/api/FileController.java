@@ -4,6 +4,7 @@ import kr.my.files.dto.FileMetadata;
 import kr.my.files.dto.UploadFileMetadataResponse;
 import kr.my.files.dto.UploadFileRequest;
 import kr.my.files.enums.UserFilePermissions;
+import kr.my.files.exception.FileStorageException;
 import kr.my.files.service.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,59 +32,11 @@ public class FileController {
 
     private final FileStorageService fileStorageService;
 
-    public FileController(FileStorageService fileStorageService) {
+    private final FileAssembler fileAssembler;
+
+    public FileController(FileStorageService fileStorageService, FileAssembler fileAssembler) {
         this.fileStorageService = fileStorageService;
-    }
-
-    @PostMapping("/upload-file")
-    public UploadFileMetadataResponse uploadFile(
-            @ModelAttribute UploadFileRequest uploadFileRequest, ModelMap modelMap
-    ) {
-        String fileName = fileStorageService.storeFile(uploadFileRequest.getFile());
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-
-        return UploadFileMetadataResponse.builder()
-                .fileName(fileName)
-                .fileType(uploadFileRequest.getFile().getContentType())
-                .fileDownloadUri(fileDownloadUri)
-                .filePermissions(uploadFileRequest.getUserFilePermissions())
-                .size(uploadFileRequest.getFile().getSize())
-                .build();
-    }
-
-
-    /**
-     * Form 으로 파일 퍼미미션 Permission 정보 전송.
-     *
-     * @param
-     * @param
-     * @return
-     */
-    @Deprecated
-    @PostMapping(value = "/upload-file-permission")
-    public UploadFileMetadataResponse uploadFileAndPerMissionJustForm(
-            @ModelAttribute UploadFileRequest uploadFileRequest, ModelMap modelMap) {
-
-        modelMap.addAttribute("fileInfo", uploadFileRequest);
-
-        String fileName = fileStorageService.storeFile(uploadFileRequest.getFile());
-
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-
-        return UploadFileMetadataResponse.builder()
-                .fileName(fileName)
-                .fileType(uploadFileRequest.getFile().getContentType())
-                .fileDownloadUri(fileDownloadUri)
-                .filePermissions(uploadFileRequest.getUserFilePermissions())
-                .size(uploadFileRequest.getFile().getSize())
-                .build();
+        this.fileAssembler = fileAssembler;
     }
 
     /**
@@ -110,6 +63,10 @@ public class FileController {
                         .build();
         }
 
+        if (file == null){
+             new FileStorageException("파일이 없어요.");
+        }
+
         String fileName = fileStorageService.storeFile(file);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -119,10 +76,10 @@ public class FileController {
 
         return ResponseEntity.ok(UploadFileMetadataResponse.builder()
                 .fileName(fileName)
-                .fileDownloadUri("")
-                .fileType("")
-                .originFileName("")
-                .size(0)
+                .fileDownloadUri(fileDownloadUri)
+                .fileType(file.getContentType())
+                .originFileName(file.getOriginalFilename())
+                .size(file.getSize())
                 .filePermissions(metadata.getUserFilePermissions())
                 .build());
     }
@@ -163,10 +120,10 @@ public class FileController {
 
         return ResponseEntity.ok(UploadFileMetadataResponse.builder()
                 .fileName(fileName)
-                .fileDownloadUri("")
-                .fileType("")
-                .originFileName("")
-                .size(0)
+                .fileDownloadUri(fileDownloadUri)
+                .fileType(file.getContentType())
+                .originFileName(file.getOriginalFilename())
+                .size(file.getSize())
                 .filePermissions(metadata.getUserFilePermissions())
                 .build());
     }
