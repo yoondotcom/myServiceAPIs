@@ -14,7 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Getter
-@Builder
 public class UploadFileMetadataResponse extends RepresentationModel<UploadFileMetadataResponse> implements Serializable {
     private String fileName;
     private String fileDownloadUri;
@@ -23,8 +22,8 @@ public class UploadFileMetadataResponse extends RepresentationModel<UploadFileMe
     private long size;
     private List<UserFilePermissions> filePermissions;
 
-
-    public void setFileMetadata(MyFiles myFiles) {
+    @Builder
+    public  UploadFileMetadataResponse(MyFiles myFiles) {
         this.fileName = myFiles.getFilePhyName();
         this.fileDownloadUri = myFiles.getFileDownloadPath();
         this.fileType = myFiles.getFileContentType();
@@ -35,4 +34,5 @@ public class UploadFileMetadataResponse extends RepresentationModel<UploadFileMe
     public void addFilePermission(List<UserFilePermissions> filePermissions){
         this.filePermissions = filePermissions;
     }
+
 }

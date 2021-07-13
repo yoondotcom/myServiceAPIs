@@ -2,10 +2,9 @@ package kr.my.files.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import kr.my.files.enums.FileStatus;
+import kr.my.files.enums.UserFilePermissions;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -41,7 +40,7 @@ public class MyFiles extends BaseTimeEntity {
     @Column(name = "FILE_Size", nullable = false, insertable = true, updatable = true, length = 1000)
     private Long fileSize;
     @Column(name = "FILE_STATUS", nullable = false, insertable = true, updatable = true, length = 3)
-    private String fileStatus;
+    private FileStatus fileStatus;
     @Column(name = "REG_DATE", nullable = false, insertable = true, updatable = true)
     private Timestamp regDate;
     @Column(name = "POST_LINKED", nullable = false, insertable = true, updatable = true)
@@ -51,9 +50,8 @@ public class MyFiles extends BaseTimeEntity {
     @Column(name = "FILE_CONTENT_TYPE", nullable = true, insertable = true, updatable = true, length = 200)
     private String fileContentType;
 
-    @OneToOne
-    @JoinColumn(name = "FILE_ROLE_SEQ")
-    private FilePermission filePermissions;
+    @ElementCollection
+    private List<UserFilePermissions> userFilePermissions;
 
 
     /**
@@ -66,13 +64,26 @@ public class MyFiles extends BaseTimeEntity {
     @OneToMany(mappedBy = "myFileSeq")
     private List<FilePermissionGroup> filePermissionGroups;
 
-    public MyFiles(String fileOrgName, String fileOwnerDisplayName,
-                   String fileContentType, FilePermission filePermissions,
-                   MyUsers myUsersByUserCode) {
+    @Builder
+    public MyFiles(String fileOrgName, String filePhyName, String fileHashCode,
+                   String fileDownloadPath, String fileOwnerDisplayName,
+                   String filePath, Long fileSize, FileStatus fileStatus,
+                   Long postLinked, String postLinkType, String fileContentType,
+                   List<UserFilePermissions> userFilePermissions, MyUsers myUsersByUserCode,
+                   List<FilePermissionGroup> filePermissionGroups) {
         this.fileOrgName = fileOrgName;
+        this.filePhyName = filePhyName;
+        this.fileHashCode = fileHashCode;
+        this.fileDownloadPath = fileDownloadPath;
         this.fileOwnerDisplayName = fileOwnerDisplayName;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
+        this.fileStatus = fileStatus;
+        this.postLinked = postLinked;
+        this.postLinkType = postLinkType;
         this.fileContentType = fileContentType;
-        this.filePermissions = filePermissions;
+        this.userFilePermissions = userFilePermissions;
         this.myUsersByUserCode = myUsersByUserCode;
+        this.filePermissionGroups = filePermissionGroups;
     }
 }

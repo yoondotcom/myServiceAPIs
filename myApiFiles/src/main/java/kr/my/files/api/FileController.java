@@ -67,21 +67,9 @@ public class FileController {
              new FileStorageException("파일이 없어요.");
         }
 
-        String fileName = fileStorageService.storeFile(file);
+        UploadFileMetadataResponse fileMetadataResponse = fileStorageService.saveFile(metadata);
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
-
-        return ResponseEntity.ok(UploadFileMetadataResponse.builder()
-                .fileName(fileName)
-                .fileDownloadUri(fileDownloadUri)
-                .fileType(file.getContentType())
-                .originFileName(file.getOriginalFilename())
-                .size(file.getSize())
-                .filePermissions(metadata.getUserFilePermissions())
-                .build());
+        return ResponseEntity.ok(fileMetadataResponse);
     }
 
     /**
@@ -108,24 +96,15 @@ public class FileController {
             metadata = UploadFileRequest.builder()
                     .fileName(file.getOriginalFilename())
                     .userFilePermissions(filePermissions)
+                    .file(file)
                     .build();
         }
 
-        String fileName = fileStorageService.storeFile(file);
+        metadata.setFile(file);
+        UploadFileMetadataResponse fileMetadataResponse = fileStorageService.saveFile(metadata);
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
 
-        return ResponseEntity.ok(UploadFileMetadataResponse.builder()
-                .fileName(fileName)
-                .fileDownloadUri(fileDownloadUri)
-                .fileType(file.getContentType())
-                .originFileName(file.getOriginalFilename())
-                .size(file.getSize())
-                .filePermissions(metadata.getUserFilePermissions())
-                .build());
+        return ResponseEntity.ok(fileMetadataResponse);
     }
 
 

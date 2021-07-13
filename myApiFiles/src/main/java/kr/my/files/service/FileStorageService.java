@@ -1,5 +1,9 @@
 package kr.my.files.service;
 
+import kr.my.files.dto.UploadFileMetadataResponse;
+import kr.my.files.dto.UploadFileRequest;
+import kr.my.files.entity.MyFiles;
+import kr.my.files.enums.FileStatus;
 import kr.my.files.exception.FileStorageException;
 import kr.my.files.exception.MyFileNotFoundException;
 import kr.my.files.property.FileStorageProperties;
@@ -22,6 +26,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import org.apache.tika.Tika;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @NoArgsConstructor
 @Service
@@ -42,6 +47,37 @@ public class FileStorageService {
         }
     }
 
+    /**
+     *
+     */
+    public UploadFileMetadataResponse saveFile(UploadFileRequest fileRequest) throws IOException{
+
+        String uuidFileName = storeFile(fileRequest.getFile());
+        String fileDownloadUri = getFileDownloadUri(uuidFileName);
+        String fileHash = getFileHash(fileRequest.getFile());
+        MultipartFile file = fileRequest.getFile();
+
+        MyFiles myfile = MyFiles.builder()
+                .fileDownloadPath(uuidFileName)
+                .fileContentType(file.getContentType())
+                .fileHashCode(fileHash)
+                .fileOrgName(file.getOriginalFilename())
+                .filePath("")
+                .fileSize(file.getSize())
+                .fileStatus(FileStatus.Registered)
+                .fileOwnerDisplayName("")
+                .userFilePermissions(fileRequest.getUserFilePermissions())
+                .filePermissionGroups(null)
+                .filePhyName(uuidFileName)
+                .postLinkType("")
+                .postLinked(0L)
+                .fileDownloadPath(fileDownloadUri)
+                .build();
+
+        return UploadFileMetadataResponse.builder().myFiles(myfile).build();
+
+    }
+
 
     /**
      * 1. 업로드된 파일을 지정된 경로에 저장한다.
@@ -58,17 +94,24 @@ public class FileStorageService {
             if (fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
-            String digestFileName = getUUIDFileName(file, ext);
+            String uuidFileName = getUUIDFileName(file, ext);
 
-            Path targetLocation = this.fileStorageLocation.resolve(digestFileName); //경로 만들기.
+            Path targetLocation = this.fileStorageLocation.resolve(uuidFileName); //경로 만들기.
 
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            return digestFileName;
+            return uuidFileName;
 
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
+    }
+
+    private String getFileDownloadUri(String fileName){
+        return  ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(fileName)
+                .toUriString();
     }
 
     /**

@@ -37,15 +37,7 @@ public class FilePermission extends BaseTimeEntity {
     private String publicRead;
     @Column(name = "PUBLIC_WRITE", nullable = false, insertable = true, updatable = true, length = 20)
     private String publicWrite;
+    @ManyToOne
+    private MyFiles myFileSeq;
 
-    public FilePermission(String ownerRead, String ownerWrite,
-                          String groupRead, String groupWrite,
-                          String publicRead, String publicWrite) {
-        this.ownerRead = ownerRead;
-        this.ownerWrite = ownerWrite;
-        this.groupRead = groupRead;
-        this.groupWrite = groupWrite;
-        this.publicRead = publicRead;
-        this.publicWrite = publicWrite;
-    }
 }
