@@ -50,7 +50,7 @@ public class FileStorageService {
     /**
      *
      */
-    public UploadFileMetadataResponse saveFile(UploadFileRequest fileRequest) throws IOException{
+    public UploadFileMetadataResponse saveFile(UploadFileRequest fileRequest) {
 
         String uuidFileName = storeFile(fileRequest.getFile());
         String fileDownloadUri = getFileDownloadUri(uuidFileName);
@@ -85,7 +85,7 @@ public class FileStorageService {
      * @param file
      * @return
      */
-    public String storeFile(MultipartFile file) {
+    private String storeFile(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         String ext = FilenameUtils.getExtension(fileName);
@@ -120,9 +120,13 @@ public class FileStorageService {
      * @return
      * @throws IOException
      */
-    private String getFileHash(MultipartFile file) throws IOException {
-        String digestFileName = DigestUtils.md5Hex(file.getInputStream());
-
+    private String getFileHash(MultipartFile file)  {
+        String digestFileName = "";
+        try{
+            digestFileName = DigestUtils.md5Hex(file.getInputStream());
+        }catch (IOException ioe){
+            throw new FileStorageException("file md5 Hash is failed");
+        }
         return digestFileName;
     }
 

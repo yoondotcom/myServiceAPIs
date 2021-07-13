@@ -25,7 +25,7 @@ public class FileAssembler extends RepresentationModelAssemblerSupport<MyFiles, 
 
         UploadFileMetadataResponse fileMetadata
                 = UploadFileMetadataResponse.builder().build();
-        fileMetadata.setFileMetadata(entity);
+        fileMetadata.builder().myFiles(entity).build();
 
         WebMvcLinkBuilder selfLinkBuilder = linkTo(FileController.class);
         fileMetadata.add(selfLinkBuilder.withRel("query-file"));
