@@ -25,4 +25,8 @@ public class UploadFileRequest {
         this.files = files;
     }
 
+    public void addUserFilePermissions(List <UserFilePermissions> userFilePermissions){
+        this.userFilePermissions = userFilePermissions;
+    }
+
 }

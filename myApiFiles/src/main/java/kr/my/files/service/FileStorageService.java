@@ -4,6 +4,7 @@ import kr.my.files.dto.UploadFileMetadataResponse;
 import kr.my.files.dto.UploadFileRequest;
 import kr.my.files.entity.MyFiles;
 import kr.my.files.enums.FileStatus;
+import kr.my.files.enums.UserFilePermissions;
 import kr.my.files.exception.FileStorageException;
 import kr.my.files.exception.MyFileNotFoundException;
 import kr.my.files.property.FileStorageProperties;
@@ -23,10 +24,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.tika.Tika;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import static kr.my.files.enums.UserFilePermissions.OWNER_READ;
+import static kr.my.files.enums.UserFilePermissions.OWNER_WRITE;
 
 @NoArgsConstructor
 @Service
@@ -57,7 +63,7 @@ public class FileStorageService {
         String fileHash = getFileHash(fileRequest.getFile());
         MultipartFile file = fileRequest.getFile();
 
-        MyFiles myfile = MyFiles.builder()
+        MyFiles myFile = MyFiles.builder()
                 .fileDownloadPath(uuidFileName)
                 .fileContentType(file.getContentType())
                 .fileHashCode(fileHash)
@@ -66,7 +72,7 @@ public class FileStorageService {
                 .fileSize(file.getSize())
                 .fileStatus(FileStatus.Registered)
                 .fileOwnerDisplayName("")
-                .userFilePermissions(fileRequest.getUserFilePermissions())
+                .userFilePermissions(addDefaultPermission(fileRequest).getUserFilePermissions())
                 .filePermissionGroups(null)
                 .filePhyName(uuidFileName)
                 .postLinkType("")
@@ -74,10 +80,19 @@ public class FileStorageService {
                 .fileDownloadPath(fileDownloadUri)
                 .build();
 
-        return UploadFileMetadataResponse.builder().myFiles(myfile).build();
+        return UploadFileMetadataResponse.builder().myFiles(myFile).build();
 
     }
 
+    private UploadFileRequest addDefaultPermission(UploadFileRequest fileRequest) {
+        if(fileRequest.getUserFilePermissions().isEmpty()){
+            List<UserFilePermissions> filePermissions = new ArrayList<>();
+            filePermissions.add(OWNER_WRITE);
+            filePermissions.add(OWNER_READ);
+            fileRequest.addUserFilePermissions(filePermissions);
+        }
+        return fileRequest;
+    }
 
     /**
      * 1. 업로드된 파일을 지정된 경로에 저장한다.

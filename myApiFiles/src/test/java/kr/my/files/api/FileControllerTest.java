@@ -2,7 +2,6 @@ package kr.my.files.api;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.my.files.dto.FileMetadata;
 import kr.my.files.dto.UploadFileRequest;
 import kr.my.files.enums.UserFilePermissions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,9 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static kr.my.files.enums.UserFilePermissions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
