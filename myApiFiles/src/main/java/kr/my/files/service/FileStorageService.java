@@ -24,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -109,24 +111,51 @@ public class FileStorageService {
             if (fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
-            String uuidFileName = getUUIDFileName(file, ext);
+            String uuidFileName = getUUIDFileName(file, ext);   //uuId 파일명 만들기
+            String fullFilePath = getSubPath("yyyy/MM/dd/HH/mm");   //
 
-            Path targetLocation = this.fileStorageLocation.resolve(uuidFileName); //경로 만들기.
+            Path targetLocation = this.fileStorageLocation.resolve(fullFilePath); //경로 만들기.
 
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            if(!Files.exists(targetLocation)){  //경로 확인 하기
+                Files.createDirectories(targetLocation);    //경로만들기
+            }
 
-            return uuidFileName;
+            Path result = targetLocation.resolve(uuidFileName);
+
+            //파일 저장하기
+            Files.copy(file.getInputStream(), result, StandardCopyOption.REPLACE_EXISTING);
+
+            return result.toString();
 
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
 
-    private String getFileDownloadUri(String fileName){
+
+    private String getFileDownloadUri(String fullPath){
         return  ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/downloadFile/")
-                .path(fileName)
+                .path(fullPath)
                 .toUriString();
+    }
+
+
+    private String getSubPath(String format){
+        DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern(format);
+        return  dtf3.format(LocalDateTime.now()).toString();
+    }
+
+    /**
+     * 파일명 저장하기.
+     * @param file
+     * @param ext
+     * @return
+     * @throws IOException
+     */
+    private String getUUIDFileName(MultipartFile file, String ext) throws IOException {
+        String uuidFileName = UUID.randomUUID().toString();
+        return uuidFileName.concat(".").concat(ext);
     }
 
     /**
@@ -145,17 +174,7 @@ public class FileStorageService {
         return digestFileName;
     }
 
-    /**
-     * 파일명 저장하기.
-     * @param file
-     * @param ext
-     * @return
-     * @throws IOException
-     */
-    private String getUUIDFileName(MultipartFile file, String ext) throws IOException {
-        String uuidFileName = UUID.randomUUID().toString();
-        return uuidFileName.concat(".").concat(ext);
-    }
+
 
     /**
      * 파일 mine type을 확인 한다.

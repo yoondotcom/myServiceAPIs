@@ -13,6 +13,8 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +80,8 @@ public class FileControllerTest {
     @DisplayName("파일 저장시 일자에 맞는 디렉터리 구조로 저장 되는지 확인")
     void checkFileSavePath() throws Exception {
         //given
+        DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern("yyyy/MM/dd/HH/mm");
+        System.out.println("yyyy/MMMM/dd HH:mm:ss-> "+dtf3.format(LocalDateTime.now()));
         //when
         //then
     }
@@ -157,5 +161,7 @@ public class FileControllerTest {
         //when
         //then
     }
+
+
 
 }
