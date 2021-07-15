@@ -60,17 +60,18 @@ public class FileStorageService {
      */
     public UploadFileMetadataResponse saveFile(UploadFileRequest fileRequest) {
 
-        String uuidFileName = storeFile(fileRequest.getFile());
+        String uuidFileName = getUUIDFileName(fileRequest.getFile());
+        String savePath = storeFile(fileRequest.getFile(), uuidFileName);
         String fileDownloadUri = getFileDownloadUri(uuidFileName);
         String fileHash = getFileHash(fileRequest.getFile());
         MultipartFile file = fileRequest.getFile();
 
         MyFiles myFile = MyFiles.builder()
-                .fileDownloadPath(uuidFileName)
+                .fileDownloadPath(fileDownloadUri)
                 .fileContentType(file.getContentType())
                 .fileHashCode(fileHash)
                 .fileOrgName(file.getOriginalFilename())
-                .filePath("")
+                .filePath(savePath)
                 .fileSize(file.getSize())
                 .fileStatus(FileStatus.Registered)
                 .fileOwnerDisplayName("")
@@ -97,38 +98,32 @@ public class FileStorageService {
     }
 
     /**
-     * 1. 업로드된 파일을 지정된 경로에 저장한다.
-     *
+     * 업로드된 파일을 지정된 경로에 저장한다.
      * @param file
-     * @return
+     * @return 저장된 경로를 반환한다.
      */
-    private String storeFile(MultipartFile file) {
+    private String storeFile(MultipartFile file, String uuidFileName) {
         // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String ext = FilenameUtils.getExtension(fileName);
 
         try {
-            if (fileName.contains("..")) {
-                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
-            }
-            String uuidFileName = getUUIDFileName(file, ext);   //uuId 파일명 만들기
             String fullFilePath = getSubPath("yyyy/MM/dd/HH/mm");   //
 
             Path targetLocation = this.fileStorageLocation.resolve(fullFilePath); //경로 만들기.
 
-            if(!Files.exists(targetLocation)){  //경로 확인 하기
-                Files.createDirectories(targetLocation);    //경로만들기
+            //경로가 없을 경우 만든다.
+            if(!Files.exists(targetLocation)){
+                Files.createDirectories(targetLocation);
             }
 
-            Path result = targetLocation.resolve(uuidFileName);
+            Path savePath = targetLocation.resolve(uuidFileName);
 
             //파일 저장하기
-            Files.copy(file.getInputStream(), result, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), savePath, StandardCopyOption.REPLACE_EXISTING);
 
-            return result.toString();
+            return savePath.toString();
 
         } catch (IOException ex) {
-            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+            throw new FileStorageException("Could not store file. Please try again!", ex);
         }
     }
 
@@ -149,12 +144,14 @@ public class FileStorageService {
     /**
      * 파일명 저장하기.
      * @param file
-     * @param ext
-     * @return
+     * @return uuid 로 파일명이 변경된 파일명 리턴.
      * @throws IOException
      */
-    private String getUUIDFileName(MultipartFile file, String ext) throws IOException {
+    private String getUUIDFileName(MultipartFile file) {
+        String ext = FilenameUtils.getExtension(
+                StringUtils.cleanPath(file.getOriginalFilename()));
         String uuidFileName = UUID.randomUUID().toString();
+
         return uuidFileName.concat(".").concat(ext);
     }
 
