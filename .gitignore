@@ -39,6 +39,7 @@ local.properties
 *.ipr
 *.iws
 .idea/
+myApiFiles/target/
 
 #################
 ## Visual Studio
