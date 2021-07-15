@@ -73,10 +73,11 @@ r(Read) : 4 w(Write) : 2 x(Execute) : 1 r + w + x : 7
 #### 파일일 특정 태그 일때 특정 서버 경로로 저장 가능
 
 - ConfigurationProperties
-- https://sgc109.github.io/2020/07/07/spring-boot-configuration-properties/
+    - https://sgc109.github.io/2020/07/07/spring-boot-configuration-properties/
 - spring boot json 과 파일 동시 처리 관련 포스트 :
+    - https://ykh6242.tistory.com/115
     - https://blogs.perficient.com/2020/07/27/requestbody-and-multipart-on-spring-boot/
-    - test case는 되나 post man으로는 처리 되지 않음.
+        - test case는 되나 post man으로는 처리 되지 않음.
 - 사용자 파일 저장 프로퍼티 값
 
 ```

@@ -67,29 +67,6 @@ public class FileControllerTest {
     }
 
     @Test
-    @DisplayName("file, permission json 정보 ")
-    void uploadShouldReturnMetadataNameWithJson() throws Exception {
-        //Given
-        MockMultipartFile file = new MockMultipartFile("file", "hello2.txt",
-                TEXT_PLAIN_VALUE, "Hello, World! JSON Meta".getBytes(StandardCharsets.UTF_8));
-        //Json 요청 생성
-
-        List<UserFilePermissions> filePermissions = new ArrayList<>();
-        filePermissions.add(OWNER_WRITE);
-        filePermissions.add(OWNER_READ);
-
-        mockMvc.perform(multipart("/upload-file-permission-json")
-                .file(file)
-                .accept(APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(UploadFileRequest.builder()
-                        .fileName(file.getOriginalFilename())
-                        .userFilePermissions(filePermissions)
-                        .build())))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-    }
-
-    @Test
     @DisplayName("모두 공계 파일일때 별도 지정된 디렉터리로 저장 여부 확인")
     void uploadFPublicFile() throws Exception {
         //given

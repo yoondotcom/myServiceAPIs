@@ -29,4 +29,8 @@ public class UploadFileRequest {
         this.userFilePermissions = userFilePermissions;
     }
 
+    public void addFileName(String fileName){
+        this.fileName = fileName;
+    }
+
 }

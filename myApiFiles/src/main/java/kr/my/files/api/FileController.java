@@ -48,48 +48,14 @@ public class FileController {
             @RequestPart(value = "file") MultipartFile file,
             @RequestPart(value = "metadata", required = false) UploadFileRequest fileRequest) {
 
-        fileRequest = UploadFileRequest.builder()
-                        .fileName(file.getOriginalFilename())
-                        .userFilePermissions(fileRequest.getUserFilePermissions())
-                        .build();
         fileRequest.addFile(file);
-
+        fileRequest.addFileName(file.getOriginalFilename());
 
         UploadFileMetadataResponse fileMetadataResponse
                 = fileStorageService.saveFile(fileRequest);
 
         return ResponseEntity.ok(fileMetadataResponse);
     }
-
-    /**
-     * Form 과 Json 으로 요청
-     *
-     * @param file
-     * @param fileRequest
-     * @return
-     */
-    @PostMapping(value = "/upload-file-permission-json",
-            consumes = {
-                    MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<UploadFileMetadataResponse> uploadFileAndPerMissionWithJson(
-            @RequestPart(value = "file") MultipartFile file,
-            @RequestPart(value = "metadata", required = false) UploadFileRequest fileRequest) {
-
-        //권한정보가 없을 경우 파일업로드 주체는 read, write 권한을 가진다.
-        fileRequest = UploadFileRequest.builder()
-                .fileName(file.getOriginalFilename())
-                .userFilePermissions(fileRequest.getUserFilePermissions())
-                .build();
-        fileRequest.addFile(file);
-
-        UploadFileMetadataResponse fileMetadataResponse
-                = fileStorageService.saveFile(fileRequest);
-
-
-        return ResponseEntity.ok(fileMetadataResponse);
-    }
-
 
     /**
      * TODO 다중파일 저장. 작업 중.
