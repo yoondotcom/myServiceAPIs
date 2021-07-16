@@ -23,6 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -65,6 +66,11 @@ public class FileControllerTest {
                 .file(file).file(metadata))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("originFileName").value(file.getOriginalFilename()))
+                .andExpect(jsonPath("fileName").exists())
+                .andExpect(jsonPath("fileDownloadUri").exists())
+                .andExpect(jsonPath("size").exists())
+
         ;
     }
 
