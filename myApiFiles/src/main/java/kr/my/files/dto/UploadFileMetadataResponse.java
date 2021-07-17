@@ -19,8 +19,10 @@ public class UploadFileMetadataResponse extends RepresentationModel<UploadFileMe
     private String fileDownloadUri;
     private String fileType;
     private String originFileName;
+    private String hashName;
     private long size;
     private List<UserFilePermissions> filePermissions;
+    private List<FilePermissionGroup> filePermissionGroups;
 
     @Builder
     public  UploadFileMetadataResponse(MyFiles myFiles) {
@@ -29,6 +31,10 @@ public class UploadFileMetadataResponse extends RepresentationModel<UploadFileMe
         this.fileType = myFiles.getFileContentType();
         this.originFileName = myFiles.getFileOrgName();
         this.size = myFiles.getFileSize();
+        this.hashName = myFiles.getFileHashCode();
+        this.filePermissions = myFiles.getUserFilePermissions();
+        this.filePermissionGroups = myFiles.getFilePermissionGroups();
+
     }
 
     public void addFilePermission(List<UserFilePermissions> filePermissions){
