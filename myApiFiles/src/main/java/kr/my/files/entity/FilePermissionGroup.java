@@ -2,6 +2,9 @@ package kr.my.files.entity;
 
 
 import jdk.jfr.Enabled;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,18 +18,16 @@ import java.util.List;
  * 파일 1개 당 총 N개의 정보가 입력 될 수 있다.
  */
 
-
-@Entity
-public class FilePermissionGroup extends BaseTimeEntity {
-    @Id
-    @GeneratedValue
-    @Column(name = "PERMISSION_GROOUP_SEQ", nullable = false, insertable = true, updatable = true)
-    private Long permissionGroupId;
+@NoArgsConstructor
+@Getter
+@Embeddable
+public class FilePermissionGroup {
 
     @Column(name = "ACCESS_CODE")
     private String idAccessCode;    //열람자 고유코드 , 사용자 id hash, 사용자 소속 부서 hash, 사용자 조직 hash 등.
 
-    @JoinColumn(name = "MY_FILES_FILE_SEQ", referencedColumnName = "FILE_SEQ", nullable = false)
-    @ManyToOne
-    private MyFiles myFileSeq;
+    @Builder
+    public FilePermissionGroup(String idAccessCode) {
+        this.idAccessCode = idAccessCode;
+    }
 }

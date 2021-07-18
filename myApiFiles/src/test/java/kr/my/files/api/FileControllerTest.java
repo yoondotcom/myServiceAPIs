@@ -23,6 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -49,6 +50,11 @@ public class FileControllerTest {
         filePermissions.add(OWNER_WRITE);
         filePermissions.add(OWNER_READ);
 
+        List<String> filePermissionGroup = new ArrayList<>();
+        filePermissionGroup.add("$2a$10$TuKGiVuLJl3xhaVPDNj3EOcjDyKrMcFcc7m.d.PsFX7UjbTgrl1Ju");
+        filePermissionGroup.add("f52fbd32b2b3b86ff88ef6c490628285f482af15ddcb29541f94bcf526a3f6c7");
+        filePermissionGroup.add("fb8c2e2b85ca81eb4350199faddd983cb26af3064614e737ea9f479621cfa57a  ");
+
         MockMultipartFile metadata = new MockMultipartFile(
                 "metadata",
                 "metadata",
@@ -57,6 +63,7 @@ public class FileControllerTest {
                         .writeValueAsString(UploadFileRequest.builder()
                                 .fileName(file.getOriginalFilename())
                                 .userFilePermissions(filePermissions)
+                                .idAccessCodes(filePermissionGroup)
                                 .build())
                         .getBytes(StandardCharsets.UTF_8));
 
@@ -65,6 +72,11 @@ public class FileControllerTest {
                 .file(file).file(metadata))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("originFileName").value(file.getOriginalFilename()))
+                .andExpect(jsonPath("fileName").exists())
+                .andExpect(jsonPath("fileDownloadUri").exists())
+                .andExpect(jsonPath("size").exists())
+
         ;
     }
 

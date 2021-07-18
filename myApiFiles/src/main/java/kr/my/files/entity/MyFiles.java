@@ -53,6 +53,11 @@ public class MyFiles extends BaseTimeEntity {
     @ElementCollection
     private List<UserFilePermissions> userFilePermissions;
 
+    @ElementCollection
+    @CollectionTable(name="file_permission_group", joinColumns = @JoinColumn(name = "file_seq"))
+    private List<FilePermissionGroup> filePermissionGroups;
+
+
 
     /**
      * 파일을 조회 하면 해당 사용자를 나오게 한다.
@@ -61,8 +66,6 @@ public class MyFiles extends BaseTimeEntity {
     @JoinColumn(name = "USER_CODE", referencedColumnName = "USER_CODE", nullable = false)
     private MyUsers myUsersByUserCode;
 
-    @OneToMany(mappedBy = "myFileSeq")
-    private List<FilePermissionGroup> filePermissionGroups;
 
     @Builder
     public MyFiles(String fileOrgName, String filePhyName, String fileHashCode,

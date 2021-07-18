@@ -2,6 +2,7 @@ package kr.my.files.service;
 
 import kr.my.files.dto.UploadFileMetadataResponse;
 import kr.my.files.dto.UploadFileRequest;
+import kr.my.files.entity.FilePermissionGroup;
 import kr.my.files.entity.MyFiles;
 import kr.my.files.enums.FileStatus;
 import kr.my.files.enums.UserFilePermissions;
@@ -29,6 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.tika.Tika;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -76,7 +78,7 @@ public class FileStorageService {
                 .fileStatus(FileStatus.Registered)
                 .fileOwnerDisplayName("")
                 .userFilePermissions(addDefaultPermission(fileRequest).getUserFilePermissions())
-                .filePermissionGroups(null)
+                .filePermissionGroups(addUserAccessCode(fileRequest.getIdAccessCodes()))
                 .filePhyName(uuidFileName)
                 .postLinkType("")
                 .postLinked(0L)
@@ -85,6 +87,15 @@ public class FileStorageService {
 
         return UploadFileMetadataResponse.builder().myFiles(myFile).build();
 
+    }
+
+    private List<FilePermissionGroup> addUserAccessCode(List<String> idAccessCode){
+        return idAccessCode.stream()
+                .map(a ->
+                    FilePermissionGroup.builder()
+                    .idAccessCode(a)
+                    .build())
+                .collect(Collectors.toList());
     }
 
     private UploadFileRequest addDefaultPermission(UploadFileRequest fileRequest) {

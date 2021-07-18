@@ -16,6 +16,7 @@ public class UploadFileRequest {
     private MultipartFile file;
     private MultipartFile[] files;
     private List <UserFilePermissions> userFilePermissions;
+    private List<String> idAccessCodes;
 
     public void addFile(MultipartFile file){
         this.file = file;

@@ -11,6 +11,12 @@
 
 ## File upload
 
+### 환경설정
+- 환경구성
+    - mysql 설치
+    - 스키마 생성 (file-apis)
+    - application.properties mysql 정보 수정 (본인 환경에 맞도록)
+
 #### 파일저장: path YYYY/MM/DD/HH
 
 #### 파일명: hash (MD5) 저장
@@ -100,3 +106,21 @@ file.protect-space-dir= D${user.home}/Download
         다운로드 권한 표시: owner, every, group ...  
     }
 ```
+
+### 테스트 방법
+#### Junit Test Case
+- FilControllerTest 실행
+
+#### web ui
+- http://localhost:8080/demo-file-upload.html 호출 후 해당 필드 입력하여 전송
+
+#### Post Man
+
+- POST 요청
+- url 입력 localhost:8080/upload-file-permission-json-file
+- body
+    - form-data
+    - key : file, metadata
+    - value : 
+        - file: 아무파일이나 
+        - metadata: [project] > test > resources > data > permission.json 파일 선택
