@@ -70,13 +70,13 @@ public class FileController {
 
         fileRequest.addFiles(files);
 
-         Arrays.asList(files)
+        Arrays.asList(files)
                 .stream()
                 .map(file -> fileStorageService.saveFile(fileRequest))
                 .collect(Collectors.toList());
 
 
-         return null;
+        return null;
     }
 
 
