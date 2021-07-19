@@ -25,6 +25,8 @@
     2. 파일을 로컬에 복사 한다.
     3. 복사된 파일로 채크썸으로 파일명을 만든다. 
     4. 채크썸으로 복사된 파일을 리네임 하여 저장한다.
+
+
         => 체크섬을 체크섬으로 리네임 하면 체크썸이 유지가 되나?? 
         => 체크썸으로 리네임 한다는 것은 리네임된 체크썸으로 저장하겠다느 뜻이 아님
         => 그냥 그렇게 원본을 MD5 저장 하겠단 뜻임
@@ -113,6 +115,13 @@ file.protect-space-dir= D${user.home}/Download
 
 #### web ui
 - http://localhost:8080/demo-file-upload.html 호출 후 해당 필드 입력하여 전송
+    - 참고 : Server 측 셋팅 추가 
+```
+Access-Control-Allow-Orgin : 요청을 보내는 페이지의 출처 (*, 도메인)
+Access-Control-Allow-Methods : 요청을 허용하는 메소드 (Default : GET, POST, HEAD)
+Access-Control-Max-Age : 클라이언트에서 pre-flight의 요청 결과를 저장할 시간 지정. 해당 시간 동안은 pre-flight를 다시 요청하지 않는다.
+Access-Control-Allow-Headers : 요청을 허용하는 헤더
+```
 
 #### Post Man
 
