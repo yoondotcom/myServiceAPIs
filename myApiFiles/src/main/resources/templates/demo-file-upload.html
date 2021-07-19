@@ -2,29 +2,53 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.2/dist/vue.js" ></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <title>demo-file-upload</title>
+    <style>
+        .upload {
+            margin: 10px;
+        }
+        .button {
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
-<div id="app">
-    <button v-on:click="getData"> 호출 </button>
-</div>
+    <div id="main">
+        <div class="upload">
+            <input type="file" name="file" id="file" />
+        </div>
 
-<script>
-    new Vue({
-        el: '#app',
-        methods:{
-            getData: function(){
-                axios.get('')
-                    .then(function(response){
-                        alert(response);
-                        console.log(response);
-                    });
-            }
-        }
-    });
-</script>
+        <div class="upload">
+            <input type="file" name="metadata" id="metadata" />
+        </div>
 
+        <div class="button">
+            <button onclick="submit()">확인</button>
+        </div>
+    </div>
 </body>
 </html>
+
+<script>
+    var formData = new FormData();
+    var uploadFile = document.getElementById("file");
+    var uploadMetaData = document.getElementById("metadata");
+    formData.append("file", uploadFile.files[0]);
+    formData.append("metadata", uploadMetaData.files[0]);
+
+    function submit() {
+        axios.post('http://localhost:8080/upload-file-permission-json-file', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then((response) => {
+
+            })
+    }
+
+
+
+
+</script>
