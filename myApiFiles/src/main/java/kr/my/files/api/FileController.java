@@ -46,7 +46,7 @@ public class FileController {
     @PostMapping(value = "/upload-file-permission-json-file")
     public ResponseEntity<UploadFileMetadataResponse> uploadFileAndPerMissionWithJsonFile(
             @RequestPart(value = "file") MultipartFile file,
-            @RequestPart(value = "metadata", required = false) UploadFileRequest fileRequest) {
+            @RequestPart(value = "metadata") UploadFileRequest fileRequest) {
 
         fileRequest.addFile(file);
         fileRequest.addFileName(file.getOriginalFilename());
