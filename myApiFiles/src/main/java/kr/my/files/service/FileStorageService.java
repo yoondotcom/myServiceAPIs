@@ -53,7 +53,7 @@ public class FileStorageService {
         try {
             Files.createDirectories(this.fileStorageLocation);
         } catch (Exception ex) {
-            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.");
         }
     }
 
@@ -63,8 +63,9 @@ public class FileStorageService {
     public UploadFileMetadataResponse saveFile(UploadFileRequest fileRequest) {
 
         String uuidFileName = getUUIDFileName(fileRequest.getFile());
-        String savePath = storeFile(fileRequest.getFile(), uuidFileName);
-        String fileDownloadUri = getFileDownloadUri(uuidFileName);
+        String subPath = getSubPath("yyyy/MM/dd/HH/mm");
+        String savePath = storeFile(fileRequest.getFile(), uuidFileName, subPath);
+        String fileDownloadUri = getFileDownloadUri(subPath.concat(uuidFileName));
         String fileHash = getFileHash(fileRequest.getFile());
         MultipartFile file = fileRequest.getFile();
 
@@ -113,13 +114,11 @@ public class FileStorageService {
      * @param file
      * @return 저장된 경로를 반환한다.
      */
-    private String storeFile(MultipartFile file, String uuidFileName) {
+    private String storeFile(MultipartFile file, String uuidFileName, String subPath) {
         // Normalize file name
 
         try {
-            String fullFilePath = getSubPath("yyyy/MM/dd/HH/mm");   //
-
-            Path targetLocation = this.fileStorageLocation.resolve(fullFilePath); //경로 만들기.
+            Path targetLocation = this.fileStorageLocation.resolve(subPath); //경로 만들기.
 
             //경로가 없을 경우 만든다.
             if(!Files.exists(targetLocation)){
@@ -134,7 +133,7 @@ public class FileStorageService {
             return savePath.toString();
 
         } catch (IOException ex) {
-            throw new FileStorageException("Could not store file. Please try again!", ex);
+            throw new FileStorageException("Could not store file. Please try again!");
         }
     }
 

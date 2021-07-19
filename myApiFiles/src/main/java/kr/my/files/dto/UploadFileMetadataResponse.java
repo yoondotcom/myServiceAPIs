@@ -8,7 +8,6 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +18,7 @@ public class UploadFileMetadataResponse extends RepresentationModel<UploadFileMe
     private String fileDownloadUri;
     private String fileType;
     private String originFileName;
-    private String hashName;
+    private String checkSum;
     private long size;
     private List<UserFilePermissions> filePermissions;
     private List<FilePermissionGroup> filePermissionGroups;
@@ -31,7 +30,7 @@ public class UploadFileMetadataResponse extends RepresentationModel<UploadFileMe
         this.fileType = myFiles.getFileContentType();
         this.originFileName = myFiles.getFileOrgName();
         this.size = myFiles.getFileSize();
-        this.hashName = myFiles.getFileHashCode();
+        this.checkSum = myFiles.getFileHashCode();
         this.filePermissions = myFiles.getUserFilePermissions();
         this.filePermissionGroups = myFiles.getFilePermissionGroups();
 

@@ -1,11 +1,7 @@
 package kr.my.files.exception;
 
-public class FileStorageException extends RuntimeException {
+public class FileStorageException extends InvalidValueException {
     public FileStorageException(String message) {
-        super(message);
-    }
-
-    public FileStorageException(String message, Throwable cause) {
-        super(message, cause);
+        super(ErrorCode.INVALID_INPUT_VALUE);
     }
 }
