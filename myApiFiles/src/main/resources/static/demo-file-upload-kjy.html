@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>demo-file-upload</title>
+    <script>
+        function submit() {
+            const formData = new FormData();
+            const uploadFile = document.getElementById("file");
+            const uploadMetaData = {
+                "fileName":"hello2.txt",
+                "file":null,
+                "files":null,
+                "userFilePermissions":["OWNER_WRITE","OWNER_READ"],
+                "idAccessCodes": [
+                    "$2a$10$TuKGiVuLJl3xhaVPDNj3EOcjDyKrMcFcc7m.d.PsFX7UjbTgrl1Ju",
+                    "f52fbd32b2b3b86ff88ef6c490628285f482af15ddcb29541f94bcf526a3f6c7",
+                    "fb8c2e2b85ca81eb4350199faddd983cb26af3064614e737ea9f479621cfa57a"
+                ]
+            };
+
+            const json = JSON.stringify(uploadMetaData);
+            const blob = new Blob([json], {
+                type: 'application/json'
+            });
+
+            formData.append("file", uploadFile.files[0]);
+            formData.append("metadata", blob);
+
+            axios.post('http://localhost:8080/upload-file-permission-json-file', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then((response) =>{
+                    console.log(response)
+                });
+        }
+
+    </script>
+    <style>
+        .upload {
+            margin: 10px;
+        }
+        .button {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="main">
+    <div class="upload">
+        <input type="file" name="file" id="file" />
+    </div>
+
+    <div class="button">
+        <button onclick="submit()">확인</button>
+    </div>
+</div>
+</body>
+</html>
+
+
