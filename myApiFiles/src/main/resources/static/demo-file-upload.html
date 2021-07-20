@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>file upload test user interface</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+
+    function send(){
+       const obj = {
+          "fileName":"hello2.txt",
+          "file":null,
+          "files":null,
+          "userFilePermissions":["OWNER_WRITE","OWNER_READ"],
+          "idAccessCodes": [
+              "$2a$10$TuKGiVuLJl3xhaVPDNj3EOcjDyKrMcFcc7m.d.PsFX7UjbTgrl1Ju",
+              "f52fbd32b2b3b86ff88ef6c490628285f482af15ddcb29541f94bcf526a3f6c7",
+              "fb8c2e2b85ca81eb4350199faddd983cb26af3064614e737ea9f479621cfa57a"
+          ]
+        };
+
+    const imageFile = document.querySelector('#file');
+    const json = JSON.stringify(obj);
+    const blob = new Blob([json], {
+        type: 'application/json'
+    });
+    const formData = new FormData();
+    formData.append("metadata", blob);
+    formData.append("file", imageFile.files[0]);
+
+
+    try {
+        axios
+        .post('/upload-file-permission-json-file', formData, {
+            headers: {
+            "Content-Type": `multipart/form-data`,
+            },
+        })
+        .then((res) => console.log(res));
+    } catch (e) {
+        dispatch({
+        type: type.WRITE_SALE_POST_FAILURE,
+        error: e,
+             });
+        }
+    }
+
+    function test(){
+        alert('test');
+    }
+
+    </script>
+</head>
+<body>
+    파일업로드 테스트.
+    <input type = "file" name="file" id="file" />
+    <button name="button" onclick="send()">눌러보세요</button>
+</body>
+</html>

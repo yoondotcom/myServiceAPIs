@@ -4,6 +4,8 @@ package kr.my.files.dto;
 import kr.my.files.enums.UserFilePermissions;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Builder
@@ -12,10 +14,14 @@ import java.util.List;
 @ToString
 @Getter
 public class UploadFileRequest {
+    @NotEmpty
     private String fileName;
+    @NotEmpty
     private MultipartFile file;
     private MultipartFile[] files;
+    @NotEmpty
     private List <UserFilePermissions> userFilePermissions;
+    @NotEmpty
     private List<String> idAccessCodes;
 
     public void addFile(MultipartFile file){
