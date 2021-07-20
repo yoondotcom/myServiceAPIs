@@ -105,4 +105,8 @@ public class FileController {
                 .body(resource);
     }
 
+    @GetMapping("/demo-file-uploac")
+    public String demoFileUpload(Model model) {
+        return "/demo-file-uploac";
+    }
 }
