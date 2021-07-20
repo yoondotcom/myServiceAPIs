@@ -4,6 +4,7 @@ package kr.my.files.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.my.files.dto.UploadFileRequest;
 import kr.my.files.enums.UserFilePermissions;
+import kr.my.files.service.FileStorageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +13,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static kr.my.files.enums.UserFilePermissions.*;
+import static kr.my.files.enums.UserFilePermissions.OWNER_READ;
+import static kr.my.files.enums.UserFilePermissions.OWNER_WRITE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -36,6 +40,9 @@ public class FileControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    FileStorageService fileStorageService;
 
     @Test
     @DisplayName("file, permission.json 파일 submit 테스트")
@@ -76,16 +83,7 @@ public class FileControllerTest {
                 .andExpect(jsonPath("fileName").exists())
                 .andExpect(jsonPath("fileDownloadUri").exists())
                 .andExpect(jsonPath("size").exists())
-
         ;
-    }
-
-    @Test
-    @DisplayName("모두 공계 파일일때 별도 지정된 디렉터리로 저장 여부 확인")
-    void uploadFPublicFile() throws Exception {
-        //given
-        //when
-        //then
     }
 
     @Test
@@ -93,7 +91,21 @@ public class FileControllerTest {
     void checkFileSavePath() throws Exception {
         //given
         DateTimeFormatter dtf3 = DateTimeFormatter.ofPattern("yyyy/MM/dd/HH/mm");
-        System.out.println("yyyy/MMMM/dd HH:mm:ss-> "+dtf3.format(LocalDateTime.now()));
+        Method method = fileStorageService.getClass().getDeclaredMethod("getSubPath", String.class);
+        method.setAccessible(true);
+        String values = dtf3.format(LocalDateTime.now()).toString();
+
+        //when
+        String argument = (String) method.invoke(fileStorageService, "yyyy/MM/dd/HH/mm");
+
+        //then
+        assertEquals(values, argument);
+    }
+
+    @Test
+    @DisplayName("모두 공계 파일일때 별도 지정된 디렉터리로 저장 여부 확인")
+    void uploadFPublicFile() throws Exception {
+        //given
         //when
         //then
     }
